@@ -5,12 +5,11 @@
         "esModuleInterop": true,
         "moduleResolution": "node",
         "noImplicitAny": false,
-        "sourceMap": true
+        "sourceMap": true,
+        "outDir": "build", // Types should go into this directory. 
+        "declaration": true // Generate d.ts files
     },
-    "exclude": [
-        "node_modules"
-    ],
     "include": [
-        "./src/javascript/**/*"
-    ],    
+        "./src/**/*"
+    ],
 }
