@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomGrid = void 0;
-const Random_1 = require("../../../libs/engine/generic/rng/Random");
+const Random_1 = require("../../../libs/engine/generic/rng/random");
 const random_1 = require("../../../libs/engine/slots/utils/random");
 class CustomGrid {
-    static AddBlastSymbol(rng, state, math) {
+    static AddBlastSymbol (rng, state, math) {
         const addBlast = random_1.RandomHelper.GetRandomFromList(rng, math.blastProb);
         if (addBlast.add) {
             const pos = rng.getRandom(new Random_1.RandomObj(0, 3, -1));
             state.initialGrid[pos.num][0] = math.blastSymbol;
         }
     }
-    static AddNewReel(rng, state, math, accumulated) {
+    static AddNewReel (rng, state, math, accumulated) {
         const d = 10000;
         let prob;
         let symbols = [];

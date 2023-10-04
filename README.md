@@ -1,1 +1,1 @@
-# meekTab SC backend ver: 2.0.0
+# mahjong-2-ways

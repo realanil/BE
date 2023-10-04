@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RGS = void 0;
 const express_1 = __importDefault(require("express"));
 const bignumber_js_1 = __importDefault(require("bignumber.js"));
+const cors = require('cors')
 const uuid_1 = require("uuid");
 class RGS {
     constructor(gameServer) {
@@ -14,7 +15,7 @@ class RGS {
         this.app.use(express_1.default.json());
         this.app.use(express_1.default.urlencoded({ extended: true }));
         this.server = gameServer;
-        this.app.post('/:gameCode/config', (req, res) => {
+        this.app.post('/:gameCode/config', cors(), (req, res) => {
             const gameCode = req.params.gameCode;
             const config = this.server.config(null);
             config.sessionid = (0, uuid_1.v4)();
@@ -26,7 +27,7 @@ class RGS {
             this.states.set(config.sessionid, null);
             res.send(config).status(200);
         });
-        this.app.post('/:gameCode/play', (req, res) => {
+        this.app.post('/:gameCode/play', cors(), (req, res) => {
             const gameCode = req.params.gameCode;
             const sessionid = req.body.sessionid;
             if (!this.states.has(sessionid)) {
@@ -43,7 +44,7 @@ class RGS {
             res.send(response.response).status(200);
         });
     }
-    start(port) {
+    start (port) {
         this.app.listen(port, () => {
             console.log(`listening at port ${port} `);
         });
