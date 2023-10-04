@@ -69,12 +69,8 @@ export class BaseSlotGame {
         this.executePlay( request.action );
 
         response.state = this.state;
-        response.response = this.getPlayResponse();
+        response.response = new PlayResponseModel( this.version, this.name, this.state.error, this.state);
         return response;
-    }
-
-    protected getPlayResponse() :PlayResponseModel {
-        return new PlayResponseModel( this.version, this.name, this.state.error, this.state);
     }
 
     protected executePlay( action:string) {

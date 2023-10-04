@@ -1,1 +1,2 @@
-# mahjong-2-ways
+# Mahjong 2 Ways
+

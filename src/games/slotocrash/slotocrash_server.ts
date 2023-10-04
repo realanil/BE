@@ -11,14 +11,12 @@ import { SlotocrashMath } from "./models/slotocrash_math";
 import { SpinCondition } from "../../libs/engine/slots/conditions/spin_condition";
 import { Triggerer } from "../../libs/engine/slots/features/triggerer";
 import { UpdateFeature } from "../../libs/engine/slots/features/update_feature";
-import { SlotCrashResponseModel } from "./models/slotcrash_response";
-import { PlayResponseModel } from "../../libs/platform/slots/play_response_model";
 
 
 export class SlotocrashServer extends BaseSlotGame {
 
     constructor(){
-        super("Slotocrash", "0.3");
+        super("Slotocrash", "0.1");
         
         this.state = new SlotocrashState();
         this.math = new SlotocrashMath();
@@ -57,7 +55,6 @@ export class SlotocrashServer extends BaseSlotGame {
 
         this.state.gameStatus.nextAction = ["freespin"];
         (this.state as SlotocrashState).isCollected  = true;
-        (this.state as SlotocrashState).collectedWin  = this.state.freespin.accumulated;
 
     }
 
@@ -65,15 +62,11 @@ export class SlotocrashServer extends BaseSlotGame {
         let state:SlotSpinState = this.state.paidSpin[0];
         const previn = this.state.freespin.accumulated;
         const stake = this.state.gameStatus.stakeValue;
-        state.multiplier += 1;
         CustomGrid.AddNewReel( this.rng, state, this.math as SlotocrashMath, Number(previn));
         state.finalGrid = Cloner.CloneGrid( state.initialGrid);
         state.wins = CustomWins.EvaluateNewReelWin( state.finalGrid, new BigNumber(stake), this.math as SlotocrashMath);
-        if (state.wins.length > 1){
-            throw new Error( "Wins " + state.wins.length );
-        }
-        
         state.win = CalculateWins.AddPays( state.wins );
+        state.multiplier += 1;
         state.win = state.win.multipliedBy( state.multiplier);
         
         this.state.freespin.accumulated = new BigNumber(previn).plus( state.win);
@@ -92,13 +85,6 @@ export class SlotocrashServer extends BaseSlotGame {
             this.state.gameStatus.nextAction = ["spin"];
         }
 
-        this.state.gameStatus.currentWin = new BigNumber(0);
-        this.state.gameStatus.totalWin = new BigNumber(0);
-
-    }
-
-    protected getPlayResponse() :PlayResponseModel {
-        return new SlotCrashResponseModel( this.version, this.name, this.state.error, this.state);
     }
 
 }

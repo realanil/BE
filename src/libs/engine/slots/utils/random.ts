@@ -10,7 +10,7 @@ export class RandomHelper {
             totalWeight += item.weight;
         });
 
-        const random: RandomObj = rng.getRandom(new RandomObj(0, totalWeight, -1));
+        const random: RandomObj = rng.getRandom(new RandomObj(0, totalWeight - 1, -1));
         return this.GetObjectFromList(random.num, list);
     }
 

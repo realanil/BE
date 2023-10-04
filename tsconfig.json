@@ -6,10 +6,12 @@
         "moduleResolution": "node",
         "noImplicitAny": false,
         "sourceMap": true,
-        "outDir": "build", // Types should go into this directory. 
-        "declaration": true // Generate d.ts files
+        "allowSyntheticDefaultImports": true,
     },
+    "exclude": [
+        "node_modules"
+    ],
     "include": [
-        "./src/**/*"
+        "./src/javascript/**/*"
     ],
 }
