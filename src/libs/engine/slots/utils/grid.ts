@@ -53,20 +53,4 @@ export class Grid {
         return offsets;
     }
 
-    static ReplaceSymbolsInGrid( symbols :number[], grid :number[][], newSymbol: number ){
-        const newgrid :number[][] = [[]];
-
-        for (let reel :number = 0; reel < grid.length; reel++) {
-            newgrid[reel] = [];
-            for (let row :number = 0; row < grid[reel].length; row++) {
-                if ( symbols.includes(grid[reel][row]) ) {
-                    newgrid[reel][row] = newSymbol;
-                } else {
-                    newgrid[reel][row] = grid[reel][row]
-                }
-            }
-        }
-        return newgrid;
-    }
-
 }

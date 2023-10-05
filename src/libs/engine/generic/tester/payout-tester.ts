@@ -32,7 +32,7 @@ export class PayoutTester{
             }
         }
 
-        this.createPayoutKey(key, "", 1000);
+        this.createPayoutKey(key, "", 999999999);
         this.updateKeyCount(key);
     }
 
@@ -50,7 +50,7 @@ export class PayoutTester{
             }
         }
 
-        this.createPayoutKey(key, "", 2000);
+        this.createPayoutKey(key, "", 999999999);
         this.updateKeyCount(key);
         
     }
@@ -72,13 +72,19 @@ export class PayoutTester{
     }
 
     protected printReport() {
-        this.payouts.sort((a,b) => (a.group > b.group) ? 1 : ((b.group > a.group) ? -1 : 0))  
-        this.payouts.sort((a,b) => (a.priority > b.priority) ? 1 : ((b.priority > a.priority) ? -1 : 0));
-        
+
+        this.payouts.sort((a,b) => (a.priority > b.priority) ? 1 : ((b.priority > a.priority) ? -1 : 0))        
+        // fileName += ".txt";
+        // try {
+        //     PrintStream out = new PrintStream(new FileOutputStream(fileName));
+        //     System.setOut(out);
+        // } catch (FileNotFoundException e) {
+        //     e.printStackTrace();
+        // }
+
         console.log("Total Spins," + this.totalSpins);
         console.log("Total Bet," + this.totalBet);
         console.log("Total Win," + this.totalWin);
-        console.log("Game RTP," + this.getGameRTP().toFormat(5) );
         console.log("Winning Spins," + this.winningSpins);
         console.log("");
 
@@ -95,17 +101,17 @@ export class PayoutTester{
             }
 
             if ( pay.payout.isGreaterThan( new BigNumber(0)) ){
-                console.log( pay.key + "," + pay.count + "," + pay.payout );
+                console.log( pay.key + " , count : " + pay.count + ", payout : " + pay.payout );
             } else {
                 if (pay.count > 0) {
-                    console.log(pay.key + "," + pay.count );
+                    console.log(pay.key + ", count : " + pay.count );
                 }
             }
         }
     }
 
     protected printProgressReport(spinsPlayed :number) {
-        if (spinsPlayed > 100 && spinsPlayed % 50000 == 0) {
+        if (spinsPlayed > 10 && spinsPlayed % 50000 == 0) {
             console.log(spinsPlayed + " RTP: " + this.getGameRTP());
         }
     }
