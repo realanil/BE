@@ -2,7 +2,6 @@ import { SlotMath } from "../../engine/slots/models/slot_math_model";
 import { SlotState } from "../../engine/slots/models/slot_state_model";
 import { NodeRNG } from "../base/node_rng";
 import { PlatformMath } from "../base/platform_math";
-import { ResponseModel } from "../base/response_model";
 import { ConfigResponseModel } from "./config_response_model";
 import { PlayResponseModel } from "./play_response_model";
 import { RequestModel } from "./request_model";
@@ -22,15 +21,15 @@ export class BaseSlotGame {
         this.version = version;
         
         this.rng = new NodeRNG();
-        this.state = this.defaultEmptyState();
+        this.state = new SlotState();
     }
 
-    public config( state :SlotState) : ResponseModel {
-        let response :ResponseModel = null;
+    public config( state :SlotState) : ConfigResponseModel {
+        let response :PlayResponseModel = null;
         if (state && state.gameStatus && state.gameStatus.action !== "" && !state.gameStatus.nextAction.includes("spin")) {
-            response = this.getPlayResponse();
+            response = new PlayResponseModel( this.version, this.name, this.state.error, this.state);
         }
-        return this.getConfigResponse( response);
+        return new ConfigResponseModel( this.version, this.name, this.math, response);
     }
 
     public play( request : RequestModel ) : ServerResponseModel {
@@ -63,6 +62,8 @@ export class BaseSlotGame {
         }
         this.state.error = null;
 
+        
+        
         this.state.gameStatus.action = request.action;
         this.rng.setCheat( request.cheat );
         this.executePlay( request.action );
@@ -72,12 +73,8 @@ export class BaseSlotGame {
         return response;
     }
 
-    protected getPlayResponse() :ResponseModel {
+    protected getPlayResponse() :PlayResponseModel {
         return new PlayResponseModel( this.version, this.name, this.state.error, this.state);
-    }
-
-    protected getConfigResponse( response :ResponseModel) :ResponseModel {
-        return new ConfigResponseModel( this.version, this.name, this.math, response);
     }
 
     protected executePlay( action:string) {

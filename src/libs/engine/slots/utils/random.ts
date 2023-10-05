@@ -2,9 +2,7 @@ import { IRandom, RandomObj } from "../../generic/rng/Random";
 
 export class RandomHelper {
 
-    static GetRandomFromList(rng :IRandom, list: {weight:number}[] | undefined) : {weight:number} | null {
-        if ( !list || list.length == 0) throw new Error("Empty List") ;
-
+    static GetRandomFromList(rng :IRandom, list: {weight:number}[]) : {weight:number} {
         if (list.length == 1) return list[0];
 
         let totalWeight :number = 0;
@@ -16,9 +14,7 @@ export class RandomHelper {
         return this.GetObjectFromList( random.num, list);
     }
 
-    static GetObjectFromList(randomNumber:number, list:{weight:number}[]):{weight:number} | null {
-        if (!list ||list.length == 0) throw new Error("Empty List") ;
-
+    static GetObjectFromList(randomNumber:number, list:{weight:number}[]):{weight:number} {
         if (list.length == 1) return list[0];
 
         let weightSum: number = 0;
