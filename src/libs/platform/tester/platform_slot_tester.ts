@@ -10,22 +10,19 @@ export class PlatformSlotTester extends SlotTester {
 
     public startTesting( spinsCount :number = 100000000) {
         super.startTesting( spinsCount);
-
         while( spinsCount > 0) {
             const response :ServerResponseModel = this.game.play( this.requestModel() );
-            if (response.response.error !== null) {
+            if (response.response.error !== null && response.response.error.length > 2 ) {
                 console.log( response.response.error);
                 break;
             }
-
+            
             this.state = response.state;
             this.calculateGameRTP();
             this.recordSlotRTP(this.state);
             if ( this.state.gameStatus.nextAction.includes("spin") ) {
                 spinsCount--;
-                if ( spinsCount %50000 == 0) {
-                    console.log( spinsCount, this.getGameRTP().toNumber() )
-                } 
+                this.printProgressReport( spinsCount);
                 if ( spinsCount == 0 ) {
                     this.printReport();
                 }        

@@ -4,18 +4,21 @@ import { GameState } from "../../generic/models/game_state_model";
 export class SlotState extends GameState {
 
     public freespin :FeatureDetails;
-    public freespins :SlotSpinState[];
+    public freespins :SlotSpinState[][];
     public paidSpin :SlotSpinState[] = [];
 }
 
 export class FeatureDetails{
     public total :number;
     public left :number;
+    public retrigger :number;
     public accumulated :BigNumber;
+
 }
 
 
 export class SlotSpinState {
+    public reelId :string = null;
     public stops :number[][] = [[]];
     public initialGrid :number[][] = [[]];
     public finalGrid :number[][] = [[]];
@@ -33,6 +36,7 @@ export class SlotSpinWinsState {
     public id :number;
     public type :string;
     public wildIncluded :boolean;
+    public multiplier :number = null;
 }
 
 export class SlotFeaturesState {
@@ -42,6 +46,7 @@ export class SlotFeaturesState {
     public offsets :number[];
     public triggers :string[];
     public count :number;
+    public level :string;
 }
 
 export class CascadeState {

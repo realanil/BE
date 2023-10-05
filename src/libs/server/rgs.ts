@@ -16,7 +16,7 @@ export class RGS {
         this.app = express();
         this.app.use( express.json() );
         this.app.use(express.urlencoded({ extended: true }))
-        this.app.use( cors( ))
+        this.app.use( cors({origin:'*'}))
 
         this.server = gameServer;
 
