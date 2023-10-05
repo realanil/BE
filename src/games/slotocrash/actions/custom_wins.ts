@@ -6,12 +6,13 @@ import { SlotocrashMath } from "../models/slotocrash_math";
 export class CustomWins {
 
     static EvaluateNewReelWin(grid:number[][], stake: BigNumber, math :SlotocrashMath): SlotSpinWinsState[] {
-        const wins :SlotSpinWinsState[] = [];
+        
         const lastSymbol :number = grid[ grid.length-1 ][0];
         if (lastSymbol === math.blastSymbol) {
-            return wins;
+            return [];
         }
 
+        const wins :SlotSpinWinsState[] = [];
         math.info.symbols.forEach( symbol => {
             if (symbol.payout && symbol.payout.length > 0 ) {
                 if ( symbol.id === lastSymbol) {

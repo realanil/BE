@@ -5,13 +5,12 @@
         "esModuleInterop": true,
         "moduleResolution": "node",
         "noImplicitAny": false,
-        "sourceMap": true,
-        "allowSyntheticDefaultImports": true,
+        "sourceMap": true
     },
     "exclude": [
         "node_modules"
     ],
     "include": [
         "./src/javascript/**/*"
-    ],
+    ],    
 }
