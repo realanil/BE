@@ -13,9 +13,9 @@ export class ConfigResponseModel extends ResponseModel {
     public defaultBet :number;
     public bets :number[];
     public grid :number[][];
-    public prevSpin :PlayResponseModel;
+    public prevSpin :ResponseModel;
 
-    constructor( version:string, name:string, math:PlatformMath, response:PlayResponseModel ){
+    constructor( version:string, name:string, math:PlatformMath, response:ResponseModel ){
 
         super(version, name, "");
 

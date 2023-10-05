@@ -16,8 +16,9 @@ export class CreateGrid {
         return grid;
     }
 
-    static WeightedSymbolGrid(rng:IRandom, reelSet:WeightedSymbols[], layout:number[]) : number[][] {
-        const grid = [];
+    static WeightedSymbolGrid(rng:IRandom, reelSet:WeightedSymbols[] | undefined, layout:number[]) : number[][] {
+       
+        const grid :number[][] = [];
         layout.forEach( (reel, index) => {
             grid[index] = [];
             for (let i=0; i<reel; i++) {
