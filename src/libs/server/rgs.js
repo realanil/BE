@@ -5,6 +5,7 @@ var express = require("express");
 var bignumber_js_1 = require("bignumber.js");
 var uuid_1 = require("uuid");
 var cors = require("cors");
+var helmet = require("helmet");
 var RGS = /** @class */ (function () {
     function RGS(gameServer) {
         var _this = this;
@@ -13,6 +14,12 @@ var RGS = /** @class */ (function () {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(cors());
+        this.app.use(helmet.contentSecurityPolicy({
+            directives: {
+                "default-src": ["'self'", '*'],
+                blockAllMixedContent: []
+            }
+        }));
         this.server = gameServer;
         this.app.post('/:gameCode/config', function (req, res) {
             var gameCode = req.params.gameCode;

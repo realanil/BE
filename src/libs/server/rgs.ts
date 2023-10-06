@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import { ServerResponseModel } from '../platform/slots/server_response_model';
 import { v4 as uuidv4 } from 'uuid';
 import * as cors from 'cors';
+import * as helmet from "helmet";
 
 export class RGS {
 
@@ -18,6 +19,12 @@ export class RGS {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: true }))
         this.app.use(cors())
+        this.app.use(helmet.contentSecurityPolicy({
+            directives: {
+                "default-src": ["'self'", '*'],
+                blockAllMixedContent: []
+            }
+        }))
 
         this.server = gameServer;
 
