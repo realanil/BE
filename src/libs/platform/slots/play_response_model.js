@@ -1,46 +1,59 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PlayResponseModel = void 0;
-const bignumber_js_1 = __importDefault(require("bignumber.js"));
-const response_model_1 = require("../base/response_model");
-class PlayResponseModel extends response_model_1.ResponseModel {
-    constructor(version, name, error, state) {
-        super(version, name, error);
-        this.grid = [];
-        this.wins = [];
-        this.win = new bignumber_js_1.default(0);
+var bignumber_js_1 = require("bignumber.js");
+var response_model_1 = require("../base/response_model");
+var PlayResponseModel = /** @class */ (function (_super) {
+    __extends(PlayResponseModel, _super);
+    function PlayResponseModel(version, name, error, state) {
+        var _this = _super.call(this, version, name, error) || this;
+        _this.grid = [];
+        _this.wins = [];
+        _this.win = new bignumber_js_1.default(0);
         if (error !== null) {
-            return;
+            return _this;
         }
-        this.status = new StatusResponse();
-        this.status.action = state.gameStatus.action;
-        this.status.nextAction = state.gameStatus.nextAction;
-        this.status.totalBet = state.gameStatus.totalBet;
-        this.status.totalWin = state.gameStatus.totalWin;
-        this.grid = state.paidSpin[0].finalGrid;
-        this.win = state.paidSpin[0].win;
-        this.multiplier = state.paidSpin[0].multiplier;
-        this.wins = [];
-        state.paidSpin[0].wins.forEach(win => {
-            this.wins.push(new PlaySlotWinsResponse(win.id, win.symbol, win.type, win.offsets, win.pay, win.wildIncluded));
+        _this.status = new StatusResponse();
+        _this.status.action = state.gameStatus.action;
+        _this.status.nextAction = state.gameStatus.nextAction;
+        _this.status.totalBet = state.gameStatus.totalBet;
+        _this.status.totalWin = state.gameStatus.totalWin;
+        _this.grid = state.paidSpin[0].finalGrid;
+        _this.win = state.paidSpin[0].win;
+        _this.multiplier = state.paidSpin[0].multiplier;
+        _this.wins = [];
+        state.paidSpin[0].wins.forEach(function (win) {
+            _this.wins.push(new PlaySlotWinsResponse(win.id, win.symbol, win.type, win.offsets, win.pay, win.wildIncluded));
         });
         if (state.freespin !== null && state.freespin !== undefined) {
-            this.feature = new FeatureResponse();
-            this.feature.left = state.freespin.left;
-            this.feature.total = state.freespin.total;
-            this.feature.accumulated = state.freespin.accumulated;
+            _this.feature = new FeatureResponse();
+            _this.feature.left = state.freespin.left;
+            _this.feature.total = state.freespin.total;
+            _this.feature.accumulated = state.freespin.accumulated;
         }
         if (state.paidSpin.length > 1) {
-            this.subspins = [];
-            for (let i = 1; i < state.paidSpin.length; i++) {
-                const subspin = new SubSpinResponse();
+            _this.subspins = [];
+            var _loop_1 = function (i) {
+                var subspin = new SubSpinResponse();
                 subspin.grid = state.paidSpin[i].finalGrid;
                 subspin.win = state.paidSpin[i].win;
                 subspin.wins = [];
-                state.paidSpin[i].wins.forEach(win => {
+                state.paidSpin[i].wins.forEach(function (win) {
                     subspin.wins.push(new PlaySlotWinsResponse(win.id, win.symbol, win.type, win.offsets, win.pay, win.wildIncluded));
                 });
                 subspin.id = state.paidSpin[i].cascade.id;
@@ -48,30 +61,41 @@ class PlayResponseModel extends response_model_1.ResponseModel {
                 subspin.type = state.paidSpin[i].cascade.type;
                 subspin.prevWin = state.paidSpin[i].cascade.win;
                 subspin.multiplier = state.paidSpin[i].multiplier;
-                this.subspins.push(subspin);
+                this_1.subspins.push(subspin);
+            };
+            var this_1 = this;
+            for (var i = 1; i < state.paidSpin.length; i++) {
+                _loop_1(i);
             }
         }
+        return _this;
     }
-}
+    return PlayResponseModel;
+}(response_model_1.ResponseModel));
 exports.PlayResponseModel = PlayResponseModel;
-class StatusResponse {
-    constructor() {
+var StatusResponse = /** @class */ (function () {
+    function StatusResponse() {
         this.nextAction = [];
     }
-}
-class SubSpinResponse {
-    constructor() {
+    return StatusResponse;
+}());
+var SubSpinResponse = /** @class */ (function () {
+    function SubSpinResponse() {
         this.grid = [];
         this.wins = [];
         this.win = new bignumber_js_1.default(0);
         this.offsets = [];
         this.prevWin = new bignumber_js_1.default(0);
     }
-}
-class FeatureResponse {
-}
-class PlaySlotWinsResponse {
-    constructor(id, symbol, type, offsets, pay, wildIncluded) {
+    return SubSpinResponse;
+}());
+var FeatureResponse = /** @class */ (function () {
+    function FeatureResponse() {
+    }
+    return FeatureResponse;
+}());
+var PlaySlotWinsResponse = /** @class */ (function () {
+    function PlaySlotWinsResponse(id, symbol, type, offsets, pay, wildIncluded) {
         this.id = id;
         this.symbol = symbol;
         this.type = type;
@@ -79,5 +103,5 @@ class PlaySlotWinsResponse {
         this.pay = new bignumber_js_1.default(0).plus(pay);
         this.wildIncluded = wildIncluded;
     }
-}
-//# sourceMappingURL=play_response_model.js.map
+    return PlaySlotWinsResponse;
+}());

@@ -35,11 +35,11 @@ export class SlotocrashMath extends PlatformMath {
 
         this.symbols = [{ symbol:0, weight:6}, { symbol:1, weight:2}, { symbol:2, weight:2} ];
         this.symbolsAfter = [{ symbol:0, weight:4}, { symbol:1, weight:3}, { symbol:2, weight:3} ];
-        this.conditions = [{ "symbol": -1, "id": "freespins"} as any ];
+        this.conditions = [{ "symbol": -1, "id": "freespins"} ];
         
         this.actions = [ 
-            { "triggers":["freespin", "collect"], "spins":1 } as any ,
-            { "triggers":["retrigger", "collect"], "spins":1 } as any 
+            { "triggers":["freespin", "collect"], "spins":1 } ,
+            { "triggers":["retrigger", "collect"], "spins":1 } 
         ];
     }
 

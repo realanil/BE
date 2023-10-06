@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RandomObj = void 0;
-class RandomObj {
-    constructor(min, max, index) {
+var RandomObj = /** @class */ (function () {
+    function RandomObj(min, max, index) {
         this.min = -1;
         this.max = -1;
         this.index = -1;
@@ -11,6 +11,6 @@ class RandomObj {
         this.max = max;
         this.index = index;
     }
-}
+    return RandomObj;
+}());
 exports.RandomObj = RandomObj;
-//# sourceMappingURL=Random.js.map

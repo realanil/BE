@@ -1,4 +1,5 @@
-import express, { Request, Response } from 'express';
+import * as express from 'express';
+import { Request, Response } from 'express';
 import { BaseSlotGame } from '../platform/slots/base_slot_game';
 import BigNumber from 'bignumber.js';
 import { ServerResponseModel } from '../platform/slots/server_response_model';

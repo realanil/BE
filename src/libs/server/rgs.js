@@ -1,55 +1,53 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RGS = void 0;
-const express_1 = __importDefault(require("express"));
-const bignumber_js_1 = __importDefault(require("bignumber.js"));
-const uuid_1 = require("uuid");
-const cors_1 = require("cors");
-class RGS {
-    constructor(gameServer) {
+var express = require("express");
+var bignumber_js_1 = require("bignumber.js");
+var uuid_1 = require("uuid");
+var cors_1 = require("cors");
+var RGS = /** @class */ (function () {
+    function RGS(gameServer) {
+        var _this = this;
         this.states = new Map();
-        this.app = (0, express_1.default)();
-        this.app.use(express_1.default.json());
-        this.app.use(express_1.default.urlencoded({ extended: true }));
-        this.app.use(cors_1())
+        this.app = express();
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
+        this.app.use((0, cors_1.default)());
         this.server = gameServer;
-        this.app.post('/:gameCode/config', (req, res) => {
-            const gameCode = req.params.gameCode;
-            const config = this.server.config(null);
+        this.app.post('/:gameCode/config', function (req, res) {
+            var gameCode = req.params.gameCode;
+            var config = _this.server.config(null);
             config.sessionid = (0, uuid_1.v4)();
-            if (this.states.keys.length > 300) {
-                Array.from(this.states.keys())
-                    .slice(0, 300 - this.states.keys.length)
-                    .forEach(key => this.states.delete(key));
+            if (_this.states.keys.length > 300) {
+                Array.from(_this.states.keys())
+                    .slice(0, 300 - _this.states.keys.length)
+                    .forEach(function (key) { return _this.states.delete(key); });
             }
-            this.states.set(config.sessionid, null);
+            _this.states.set(config.sessionid, null);
             res.send(config).status(200);
         });
-        this.app.post('/:gameCode/play', (req, res) => {
-            const gameCode = req.params.gameCode;
-            const sessionid = req.body.sessionid;
-            if (!this.states.has(sessionid)) {
-                res.send(`invalid session id ${sessionid}`).status(200);
+        this.app.post('/:gameCode/play', function (req, res) {
+            var gameCode = req.params.gameCode;
+            var sessionid = req.body.sessionid;
+            if (!_this.states.has(sessionid)) {
+                res.send("invalid session id ".concat(sessionid)).status(200);
                 return;
             }
-            const state = this.states.get(sessionid);
-            const stake = req.body.stake ? new bignumber_js_1.default(req.body.stake) : null;
-            const request = { action: req.body.action, stake: stake, cheat: req.body.cheat, state };
-            const response = this.server.play(request);
+            var state = _this.states.get(sessionid);
+            var stake = req.body.stake ? new bignumber_js_1.default(req.body.stake) : new bignumber_js_1.default(0);
+            var request = { action: req.body.action, stake: stake, cheat: req.body.cheat, state: state };
+            var response = _this.server.play(request);
             if (response.state) {
-                this.states.set(sessionid, JSON.parse(JSON.stringify(response.state)));
+                _this.states.set(sessionid, JSON.parse(JSON.stringify(response.state)));
             }
             res.send(response.response).status(200);
         });
     }
-    start(port) {
-        this.app.listen(port, () => {
-            console.log(`listening at port ${port} `);
+    RGS.prototype.start = function (port) {
+        this.app.listen(port, function () {
+            console.log("listening at port ".concat(port, " "));
         });
-    }
-}
+    };
+    return RGS;
+}());
 exports.RGS = RGS;
-//# sourceMappingURL=rgs.js.map

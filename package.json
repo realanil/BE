@@ -8,7 +8,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node --esm src/index.ts",
-    "vt": "ts-node --esm src/tester.ts"
+    "vt": "ts-node --esm src/tester.ts",
+    "start" : "tsc src/index.ts -w & pm2 start dist/app.js --watch"
   },
   "dependencies": {
     "bignumber.js": "^9.1.1",

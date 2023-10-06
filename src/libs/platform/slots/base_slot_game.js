@@ -1,32 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseSlotGame = void 0;
-const slot_state_model_1 = require("../../engine/slots/models/slot_state_model");
-const node_rng_1 = require("../base/node_rng");
-const config_response_model_1 = require("./config_response_model");
-const play_response_model_1 = require("./play_response_model");
-const server_response_model_1 = require("./server_response_model");
-class BaseSlotGame {
-    constructor(name, version) {
+var slot_state_model_1 = require("../../engine/slots/models/slot_state_model");
+var node_rng_1 = require("../base/node_rng");
+var config_response_model_1 = require("./config_response_model");
+var play_response_model_1 = require("./play_response_model");
+var server_response_model_1 = require("./server_response_model");
+var BaseSlotGame = /** @class */ (function () {
+    function BaseSlotGame(name, version) {
         this.name = name;
         this.version = version;
         this.rng = new node_rng_1.NodeRNG();
         this.state = new slot_state_model_1.SlotState();
     }
-    config(state) {
-        let response = null;
+    BaseSlotGame.prototype.config = function (state) {
+        var response = null;
         if (state && state.gameStatus && state.gameStatus.action !== "" && !state.gameStatus.nextAction.includes("spin")) {
             response = new play_response_model_1.PlayResponseModel(this.version, this.name, this.state.error, this.state);
         }
         return new config_response_model_1.ConfigResponseModel(this.version, this.name, this.math, response);
-    }
-    play(request) {
+    };
+    BaseSlotGame.prototype.play = function (request) {
         this.state = request.state;
-        const response = new server_response_model_1.ServerResponseModel();
+        var response = new server_response_model_1.ServerResponseModel();
         if (this.state && this.state.gameStatus && this.state.gameStatus.nextAction) {
             if (!this.state.gameStatus.nextAction.includes(request.action)) {
                 response.state = this.state;
-                response.response = new play_response_model_1.PlayResponseModel(this.version, this.name, `Wrong Action. Expected ${this.state.gameStatus.nextAction} Got ${request.action}`, this.state);
+                response.response = new play_response_model_1.PlayResponseModel(this.version, this.name, "Wrong Action. Expected ".concat(this.state.gameStatus.nextAction, " Got ").concat(request.action), this.state);
                 return response;
             }
         }
@@ -39,7 +39,7 @@ class BaseSlotGame {
         }
         if (request.action === "spin") {
             if (!this.math.bets.includes(request.stake.toNumber())) {
-                response.response = new play_response_model_1.PlayResponseModel(this.version, this.name, `Invalid Stake. Got ${request.stake}`, this.state);
+                response.response = new play_response_model_1.PlayResponseModel(this.version, this.name, "Invalid Stake. Got ".concat(request.stake), this.state);
                 return response;
             }
             this.state = this.defaultEmptyState();
@@ -53,11 +53,11 @@ class BaseSlotGame {
         response.state = this.state;
         response.response = this.getPlayResponse();
         return response;
-    }
-    getPlayResponse() {
+    };
+    BaseSlotGame.prototype.getPlayResponse = function () {
         return new play_response_model_1.PlayResponseModel(this.version, this.name, this.state.error, this.state);
-    }
-    executePlay(action) {
+    };
+    BaseSlotGame.prototype.executePlay = function (action) {
         switch (action) {
             case "spin":
                 this.executeBaseSpin();
@@ -71,19 +71,19 @@ class BaseSlotGame {
             default:
                 this.state.error = "Not Allowed";
         }
-    }
-    executeBaseSpin() {
+    };
+    BaseSlotGame.prototype.executeBaseSpin = function () {
         this.state.error = "Not Allowed";
-    }
-    executeFreeSpin() {
+    };
+    BaseSlotGame.prototype.executeFreeSpin = function () {
         this.state.error = "Not Allowed";
-    }
-    executeCollect() {
+    };
+    BaseSlotGame.prototype.executeCollect = function () {
         this.state.error = "Not Allowed";
-    }
-    defaultEmptyState() {
+    };
+    BaseSlotGame.prototype.defaultEmptyState = function () {
         return new slot_state_model_1.SlotState();
-    }
-}
+    };
+    return BaseSlotGame;
+}());
 exports.BaseSlotGame = BaseSlotGame;
-//# sourceMappingURL=base_slot_game.js.map

@@ -1,14 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cloner = void 0;
-class Cloner {
-    static CloneGrid(target) {
-        let grid = JSON.parse(JSON.stringify(target));
+var Cloner = /** @class */ (function () {
+    function Cloner() {
+    }
+    Cloner.CloneGrid = function (target) {
+        var grid = JSON.parse(JSON.stringify(target));
         return grid;
-    }
-    static CloneObject(target) {
+    };
+    Cloner.CloneObject = function (target) {
         return JSON.parse(JSON.stringify(target));
-    }
-}
+    };
+    return Cloner;
+}());
 exports.Cloner = Cloner;
-//# sourceMappingURL=cloner.js.map

@@ -1,68 +1,71 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SlotActionMath = exports.SlotConditionMath = exports.WeightedSymbols = exports.SlotInfoMath = exports.SlotMath = void 0;
-const bignumber_js_1 = __importDefault(require("bignumber.js"));
-class SlotMath {
-    constructor() {
+var bignumber_js_1 = require("bignumber.js");
+var SlotMath = /** @class */ (function () {
+    function SlotMath() {
         this.info = new SlotInfoMath();
         this.paidReels = [];
         this.conditions = [];
         this.actions = [];
         this.defaultgrid = [];
     }
-    bd(v) { return new bignumber_js_1.default(v); }
-}
+    SlotMath.prototype.bd = function (v) { return new bignumber_js_1.default(v); };
+    return SlotMath;
+}());
 exports.SlotMath = SlotMath;
-class SlotInfoMath {
-    constructor() {
+var SlotInfoMath = /** @class */ (function () {
+    function SlotInfoMath() {
         this.betMultiplier = new bignumber_js_1.default(0);
         this.gridLayout = [];
         this.wildSymbols = [];
         this.payLines = [];
         this.symbols = [];
     }
-}
+    return SlotInfoMath;
+}());
 exports.SlotInfoMath = SlotInfoMath;
-class SlotSymbolsMath {
-    constructor() {
+var SlotSymbolsMath = /** @class */ (function () {
+    function SlotSymbolsMath() {
         this.payout = [];
         this.name = "";
         this.id = -1;
     }
-}
-class SlotReelsMath {
-    constructor() {
+    return SlotSymbolsMath;
+}());
+var SlotReelsMath = /** @class */ (function () {
+    function SlotReelsMath() {
         this.id = "";
         this.reels = [];
         this.symbols = [];
     }
-}
-class WeightedSymbols {
-    constructor() {
+    return SlotReelsMath;
+}());
+var WeightedSymbols = /** @class */ (function () {
+    function WeightedSymbols() {
         this.symbol = -1;
         this.weight = -1;
     }
-}
+    return WeightedSymbols;
+}());
 exports.WeightedSymbols = WeightedSymbols;
-class SlotConditionMath {
-    constructor() {
+var SlotConditionMath = /** @class */ (function () {
+    function SlotConditionMath() {
         this.symbol = -1;
         this.id = null;
         this.oak = null;
         this.minCount = -1;
         this.maxCount = -1;
     }
-}
+    return SlotConditionMath;
+}());
 exports.SlotConditionMath = SlotConditionMath;
-class SlotActionMath {
-    constructor() {
+var SlotActionMath = /** @class */ (function () {
+    function SlotActionMath() {
         this.payout = new bignumber_js_1.default(0);
         this.triggers = [];
         this.spins = -1;
     }
-}
+    return SlotActionMath;
+}());
 exports.SlotActionMath = SlotActionMath;
-//# sourceMappingURL=slot_math_model.js.map
