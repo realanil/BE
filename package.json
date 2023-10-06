@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node --esm src/index.ts",
     "vt": "ts-node --esm src/tester.ts",
-    "start" : "tsc src/index.ts -w & pm2 start dist/app.js --watch"
+    "start": "tsc src/index.ts -w & pm2 start src/index.js --watch"
   },
   "dependencies": {
     "bignumber.js": "^9.1.1",
