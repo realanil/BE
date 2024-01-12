@@ -1,4 +1,7 @@
 node_modules
 package-lock.json
-___src/
-srccc
+# src/games
+# src/libs
+*_tester.ts 
+build/
+XOXO

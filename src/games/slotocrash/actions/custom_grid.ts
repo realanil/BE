@@ -1,5 +1,4 @@
-import BigNumber from "bignumber.js";
-import { IRandom, RandomObj } from "../../../libs/engine/generic/rng/Random";
+import { IRandom, RandomObj } from "../../../libs/engine/generic/rng/random";
 import { SlotSpinState } from "../../../libs/engine/slots/models/slot_state_model";
 import { RandomHelper } from "../../../libs/engine/slots/utils/random";
 import { SlotocrashMath } from "../models/slotocrash_math";

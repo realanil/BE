@@ -15,7 +15,7 @@ import { SlotCrashResponseModel } from "./models/slotcrash_response";
 import { PlayResponseModel } from "../../libs/platform/slots/play_response_model";
 
 
-export class SlotocrashServer extends BaseSlotGame {
+export class GameServer extends BaseSlotGame {
 
     constructor(){
         super("Slotocrash", "0.3");
@@ -33,11 +33,11 @@ export class SlotocrashServer extends BaseSlotGame {
         state.win = CalculateWins.AddPays( state.wins );
         state.win = state.win.multipliedBy( state.multiplier);
 
-        const feature :SlotFeaturesState = SpinCondition.WinCondition( this.math.conditions[0], state);
+        const feature :SlotFeaturesState = SpinCondition.WinCondition( this.math.conditions["freespins"], state);
         if ( feature.isActive ) {
             state.win = state.win.plus( this.state.gameStatus.totalBet); 
-            Triggerer.UpdateFeature( this.state, feature, this.math.actions[0] );
-            Triggerer.UpdateNextAction( this.state, this.math.actions[0]);
+            Triggerer.UpdateFeature( this.state, feature, this.math.actions["freespin"] );
+            Triggerer.UpdateNextAction( this.state, this.math.actions["freespin"] );
             this.state.freespin.accumulated = state.win;
         }
 
@@ -77,10 +77,10 @@ export class SlotocrashServer extends BaseSlotGame {
         state.win = state.win.multipliedBy( state.multiplier);
         
         this.state.freespin.accumulated = new BigNumber(previn).plus( state.win);
-        const feature :SlotFeaturesState = SpinCondition.WinCondition( this.math.conditions[0], state);
+        const feature :SlotFeaturesState = SpinCondition.WinCondition( this.math.conditions["freespins"], state);
         if ( feature.isActive ) {
-            Triggerer.UpdateFeature( this.state, feature, this.math.actions[1] );
-            Triggerer.UpdateNextAction( this.state, this.math.actions[1]);
+            Triggerer.UpdateFeature( this.state, feature, this.math.actions["retrigger"] );
+            Triggerer.UpdateNextAction( this.state, this.math.actions["retrigger"]);
         }
         UpdateFeature.updateFreeSpinCount( this.state);
         if ( (this.state as SlotocrashState).isCollected  === true){
