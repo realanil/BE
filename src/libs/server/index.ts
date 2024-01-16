@@ -12,17 +12,16 @@ glob(`./src/games/*/*.ts`).then(async servFiles => {
     const engines: Map<string, BaseSlotGame> = new Map();
 
     for (let i = 0; i < servFiles.length; i++) {
+        //console.log(servFiles, "servFiles");
         const tsfile = servFiles[i].split('src\\')[1];
-        console.log(tsfile, "tsfile");
+        //console.log(tsfile, "tsfile");
         const servClass = tsfile.split(".")[0]
-        console.log(servClass, "servClass");
+
         const engine = await import('./../../' + servClass);
-        console.log(engine, "engine");
         const id: string = servFiles[i].split('\\')[2]
         console.log(id, engine, servFiles[i]);
         engines.set(id, new engine.GameServer())
     }
-
     const server = new RGS(engines);
     server.start(port);
     console.log("start server")

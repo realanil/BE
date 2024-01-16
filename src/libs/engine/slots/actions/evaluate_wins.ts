@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { LineWinEvaluator } from "../evaluator/line_win_evaluator";
-import { SlotSpinWinsState } from "../models/slot_state_model";
+import { SlotFeaturesState, SlotSpinWinsState } from "../models/slot_state_model";
 import { SlotInfoMath } from "../models/slot_math_model";
 import { WaysWinEvaluator } from "../evaluator/ways_win_evaluator";
 
@@ -27,5 +27,19 @@ export class EvaluateWins {
         
         return payouts;
     }
+
+
+    static FeatureWins( info:SlotInfoMath, feature:SlotFeaturesState, stake:BigNumber, multiplier:number=1 ) {
+        if (feature.isActive){
+            const symbol = info.symbols.find( s => s.id === feature.symbol );
+            if (symbol !== null && symbol.payout.length > 0) {
+                const pay :BigNumber = symbol.payout[ feature.offsets.length ];
+                feature.pay = pay.multipliedBy( stake).multipliedBy( multiplier);
+            }
+        }
+        return feature;
+    }
+
+
 
 }

@@ -59,6 +59,7 @@ export class SlotFeaturesState {
     public offsets:number[];
     public triggers:string[];
     public count:number;
+    public pay:BigNumber = BigNumber(0);
     public level:string;
 }
 

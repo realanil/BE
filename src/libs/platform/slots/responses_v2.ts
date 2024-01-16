@@ -45,23 +45,30 @@ export class PlayResponseV2Model extends ResponseModel {
         if ( spin && spin.length > 0 ) {   
             this.renderSpinGrid( spin[0].finalGrid, spin[0].initialGrid );
 
-            this.results.win.total = spin[0].win;            
-            this.results.win.symbolWin.coins = spin[0].win; 
+            let symbolWin = BigNumber(0);
+            let scatterWin = BigNumber(0);
 
             spin[0].wins.forEach( win => {
+                symbolWin = symbolWin.plus( win.pay);
                 const sym = { dir:"LEFT", smbID:win.symbol, lineID:win.id, amt:win.pay, num:win.offsets.length, mult:win.multiplier, offsets:win.offsets };
                 sym["pos"] = win.offsets.map( offset => [ offset%5, Math.floor( offset/5) ] )
                 this.results.win.symbolWin.symbols.push( sym )
             })
 
+            const titles = { "scatter":"SCATTER", "freespin":"FREESPINS", "bonus":"BONUS", "respin":"RESPINS" };
             spin[0].features?.forEach( feature => {
-                if ( feature.isActive && feature.id == "freespin") {
+                if ( feature.isActive &&  ["scatter", "freespin", "bonus", "respin"].includes( feature.id)) {
+                    scatterWin = scatterWin.plus( feature.pay);
                     this.results.win.scatterWin.scatters.push( {
-                        "smbID":feature.symbol, "amt":0, "num":feature.offsets?.length ,
-                        "bonusWon":"FREESPINS", "bonusWonValue":feature.count
+                        "smbID":feature.symbol, "amt":feature.pay, "num":feature.offsets?.length ,
+                        "bonusWon": titles[feature.id], "bonusWonValue":feature.count
                     })
                 }
             })
+
+            this.results.win.total = spin[0].win; 
+            this.results.win.symbolWin.coins = symbolWin;
+            this.results.win.scatterWin.coins = scatterWin; 
 
             this.results.multipliers = spin[0].multipliers && spin[0].multipliers.length > 0 ? spin[0].multipliers : undefined;
 
@@ -108,7 +115,7 @@ export class PlayResponseV2Model extends ResponseModel {
             this.state.preMult = spin[0].prevMultiplier;
             this.state.feature = [];
             spin[0].features?.forEach( feature => {
-                if (feature.isActive && feature.id !== "freespin" )
+                if (feature.isActive && !["scatter", "freespin", "bonus", "respin"].includes(feature.id) )
                     this.state.feature.push( this.getFeaturesResponse( feature) ) 
             } )
         }

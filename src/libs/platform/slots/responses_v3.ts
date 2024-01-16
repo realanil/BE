@@ -176,7 +176,7 @@ class PaytableResponse {
         this.betStep = BigNumber(stake).multipliedBy(multiplier);
         this.payoutsPerBetStepAndSymbol = [];
         math.symbols.forEach( symbol => {
-            this.payoutsPerBetStepAndSymbol.push( { symbolId:symbol.name, paytable:symbol.payout.map( e => e.multipliedBy( BigNumber(stake)) ) } )
+            this.payoutsPerBetStepAndSymbol.push( { symbolId:symbol.name, paytable:symbol.payout.map( e => e.multipliedBy( this.betStep) ) } )
         })
     }
 }

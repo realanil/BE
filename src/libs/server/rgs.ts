@@ -104,6 +104,10 @@ export class RGS {
             const response: ServerResponseModel | null = engine ? engine.play(request) : null;
 
             let balance = this.balance.has(sessionid) ? this.balance.get(sessionid) : null;
+            if ( ["goddessoffire"].includes(gameCode) ) {
+                response.response.response.state.balance = balance;
+            }
+
             if (response && response.state && balance) {
                 balance = balance.minus(BigNumber(response.bet));
                 if (balance.isLessThan(BigNumber(0))) {
@@ -116,6 +120,9 @@ export class RGS {
                 this.balance.set(sessionid, balance);
 
                 response.response.balance = balance;
+                if ( ["goddessoffire"].includes(gameCode) ) {
+                    response.response.response.transition.balance = balance;
+                }
                 res.send(response.response).status(200);
                 return;
             }

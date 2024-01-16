@@ -13,7 +13,7 @@ export class SlotMath {
     public defaultgrid:number[][] = [];
     public buyBonus:BuyBonusMath[] = [];
 
-    protected bd( v:number):BigNumber { return new BigNumber( v); } 
+    protected bd( v:number):BigNumber { return BigNumber( v); } 
 }
 
 class BuyBonusMath{
