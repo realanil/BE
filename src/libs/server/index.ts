@@ -12,9 +12,9 @@ glob(`./src/games/*/*.ts`).then(async servFiles => {
     const engines: Map<string, BaseSlotGame> = new Map();
 
     for (let i = 0; i < servFiles.length; i++) {
-        console.log(servFiles, "servFiles");
-        const tsfile:  = servFiles[i].split('src\\')[1];
-        console.log(tsfile, "tsfile");
+        //console.log(servFiles, "servFiles");
+        const tsfile = servFiles[i].split('src\\')[1];
+        //console.log(tsfile, "tsfile");
         const servClass = tsfile.split(".")[0]
         const engine = await import('./../../' + servClass);
 
