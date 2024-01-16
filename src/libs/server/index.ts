@@ -10,14 +10,14 @@ const port: string = process.env.PORT ? process.env.PORT : "8080";
 glob(`./src/games/*/*.ts`).then(async servFiles => {
 
     const engines: Map<string, BaseSlotGame> = new Map();
+    console.log("Hello");
 
     for (let i = 0; i < servFiles.length; i++) {
-        //console.log(servFiles, "servFiles");
+        console.log(servFiles, "servFiles");
         const tsfile = servFiles[i].split('src\\')[1];
-        //console.log(tsfile, "tsfile");
+        console.log(tsfile, "tsfile");
         const servClass = tsfile.split(".")[0]
         const engine = await import('./../../' + servClass);
-
         const id: string = servFiles[i].split('\\')[2]
         console.log(id, engine, servFiles[i]);
         engines.set(id, new engine.GameServer())
