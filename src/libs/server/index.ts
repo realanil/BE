@@ -21,6 +21,7 @@ glob(`./src/games/*/*.ts`).then(async servFiles => {
         const id: string = servFiles[i].split('\\')[2]
         console.log(id, engine, servFiles[i]);
         engines.set(id, new engine.GameServer())
+        console.log(id, engine, servFiles[i]);
     }
     const server = new RGS(engines);
     server.start(port);
