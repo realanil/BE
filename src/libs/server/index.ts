@@ -14,7 +14,7 @@ console.log("servFiles", servFiles);
 
     for( let i=0; i<servFiles.length; i++ ) {
         console.log("servFiles[i]", i, servFiles[i] );
-        const tsfile = servFiles[i].split('src\\')[1];
+        const tsfile = servFiles[i].split('src/')[1];
         console.log("tsfile", tsfile);
 
         const servClass = tsfile.split(".")[0]
