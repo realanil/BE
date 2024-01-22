@@ -29,17 +29,18 @@ export class SlotocrashMath extends PlatformMath {
         this.blastProb = [ { weight:6761, add:false}, {weight:3239, add:true} ];
 
         this.paidReels = [{
-            id:"", reels:[], weight:0, 
+            id:"", reels:[], 
             symbols:[{ symbol:0, weight:75}, { symbol:1, weight:20}, { symbol:2, weight:5} ]
         }];
 
         this.symbols = [{ symbol:0, weight:6}, { symbol:1, weight:2}, { symbol:2, weight:2} ];
         this.symbolsAfter = [{ symbol:0, weight:4}, { symbol:1, weight:3}, { symbol:2, weight:3} ];
-        this.conditions["freespins"] = { "symbol": -1, "id": "freespins"};
+        this.conditions = [{ "symbol": -1, "id": "freespins"} ];
         
-        this.actions["freespin"] = { "triggers":["freespin", "collect"], "spins":1 }
-        this.actions["retrigger"] = { "triggers":["retrigger", "collect"], "spins":1 }
-        
+        this.actions = [ 
+            { "triggers":["freespin", "collect"], "spins":1 } ,
+            { "triggers":["retrigger", "collect"], "spins":1 } 
+        ];
     }
 
 }

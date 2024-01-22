@@ -5,7 +5,6 @@ export class GameState {
     public version : string = "";
     public error: string = "";
     public gameStatus : GameStatus = new GameStatus();
-    public cheatNums: number[] = [];
 }
 
 export class GameStatus {

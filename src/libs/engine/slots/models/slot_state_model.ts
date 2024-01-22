@@ -3,69 +3,50 @@ import { GameState } from "../../generic/models/game_state_model";
 
 export class SlotState extends GameState {
 
-    public freespin:FeatureDetails;
-    public respin:FeatureDetails;
-    public freerespin:FeatureDetails;
-
-    public freespins:SlotSpinState[][];
-    public respins:SlotSpinState[][];
-    public freerespins:SlotSpinState[][];
-    
-    public paidSpin:SlotSpinState[] = [];
-    public buybonus:BuyBonusDetails;
+    public freespin :FeatureDetails;
+    public freespins :SlotSpinState[];
+    public paidSpin :SlotSpinState[] = [];
 }
 
 export class FeatureDetails{
-    public total:number;
-    public left:number;
-    public retrigger:number;
-    public accumulated:BigNumber;
+    public total :number;
+    public left :number;
+    public accumulated :BigNumber;
 }
 
-export class BuyBonusDetails{
-    public isBonusSpin:boolean = false;
-    public id:string = "";
-    public cost:BigNumber = new BigNumber(1);
-}
 
 export class SlotSpinState {
-    public reelId:string = null;
-    public stops:number[][] = [[]];
-    public initialGrid:number[][] = [[]];
-    public finalGrid:number[][] = [[]];
-    public win:BigNumber = new BigNumber(0);
-    public wins:SlotSpinWinsState[];
-    public cascade:CascadeState;
-    public multiplier:number = 1;
-    public multipliers?:number[];
-    public features:SlotFeaturesState[];
-    public prevMultiplier:number = 1;
+    public stops :number[][] = [[]];
+    public initialGrid :number[][] = [[]];
+    public finalGrid :number[][] = [[]];
+    public win :BigNumber = new BigNumber(0);
+    public wins :SlotSpinWinsState[];
+    public cascade :CascadeState;
+    public multiplier :number = 1;
+    public features :SlotFeaturesState[];
 }
 
 export class SlotSpinWinsState {
-    public symbol:number;
-    public pay:BigNumber;
-    public offsets:number[];
-    public id:number;
-    public type:string;
-    public wildIncluded:boolean;
-    public multiplier:number = null;
+    public symbol :number;
+    public pay :BigNumber;
+    public offsets :number[];
+    public id :number;
+    public type :string;
+    public wildIncluded :boolean;
 }
 
 export class SlotFeaturesState {
-    public id:string;
-    public isActive:boolean;
-    public symbol:number = -1;
-    public offsets:number[];
-    public triggers:string[];
-    public count:number;
-    public pay:BigNumber = BigNumber(0);
-    public level:string;
+    public id :string;
+    public isActive :boolean;
+    public symbol :number = -1;
+    public offsets :number[];
+    public triggers :string[];
+    public count :number;
 }
 
 export class CascadeState {
-    public id:number;
-    public offsets:number[]; 
-    public type:string;
-    public win:BigNumber = new BigNumber(0);
+    public id :number;
+    public offsets :number[]; 
+    public type :string;
+    public win :BigNumber = new BigNumber(0);
 }
