@@ -20,7 +20,7 @@ console.log("servFiles", servFiles);
         const servClass = tsfile.split(".")[0]
         const engine = await import( './../../' + servClass );
 
-        const id:string = servFiles[i].split('\\')[2]
+        const id:string = servFiles[i].split('/')[2]
         console.log ( id, engine, servFiles[i] );
         engines.set( id, new engine.GameServer() )
     }
