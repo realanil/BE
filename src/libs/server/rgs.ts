@@ -39,7 +39,7 @@ export class RGS {
                 return;
             }
 
-            
+
             const player = req.body.player;
             if (player === null || player === undefined || player.length < 3 || player.length > 9) {
                 res.send("invalid player " + player).status(401);
@@ -47,7 +47,8 @@ export class RGS {
             }
 
             const code = `${player}-${gameCode}`
-            const sessionId = this.ids.has(code) ? this.ids.get(code) : code+"-"+req.socket.remoteAddress+"-"+"uuidv4()";
+            //const sessionId = this.ids.has(code) ? this.ids.get(code) : code+"-"+req.socket.remoteAddress+"-"+"uuidv4()";
+            const sessionId = this.ids.has(code) ? this.ids.get(code) : code + "-" + "uuidv4()";
             let state = null;
             if (this.ids.has(code)) {
                 state = this.states.get(sessionId);
@@ -56,7 +57,7 @@ export class RGS {
                 this.states.set(sessionId, null);
                 this.balance.set(sessionId, BigNumber(this.initial_balance).plus(BigNumber(0)));
             }
-            const config: any = engine.config( state);
+            const config: any = engine.config(state);
             config.balance = this.balance.get(sessionId);
 
             if (this.states.keys.length > this.maximum_sessions) {
@@ -76,13 +77,9 @@ export class RGS {
             const gameCode = req.params.gameCode;
             const sessionid: string = req.header("session");
 
-            const sessionDetails:string[] = sessionid.split("-");
-            if (sessionDetails[1] !== gameCode ) {
+            const sessionDetails: string[] = sessionid.split("-");
+            if (sessionDetails[1] !== gameCode) {
                 res.send(`session id not linked to the game`).status(500);
-                return;
-            }
-            if (sessionDetails[2] !== req.socket.remoteAddress ) {
-                res.send(`session id not linked to the machine`).status(500);
                 return;
             }
 
@@ -106,7 +103,7 @@ export class RGS {
             const response: ServerResponseModel | null = engine ? engine.play(request) : null;
 
             let balance = this.balance.has(sessionid) ? this.balance.get(sessionid) : null;
-            if ( ["goddessoffire"].includes(gameCode) && response.response && response.response.response ) {
+            if (["goddessoffire"].includes(gameCode) && response.response && response.response.response) {
                 response.response.response.state.balance = balance;
             }
 
@@ -122,7 +119,7 @@ export class RGS {
                 this.balance.set(sessionid, balance);
 
                 response.response.balance = balance;
-                if ( ["goddessoffire"].includes(gameCode) && response.response && response.response.response ) {
+                if (["goddessoffire"].includes(gameCode) && response.response && response.response.response) {
                     response.response.response.transition.balance = balance;
                 }
                 res.send(response.response).status(200);
