@@ -71,7 +71,7 @@ export class RGS {
                     .forEach(key => this.ids.delete(key))
             }
             res.setHeader("session", sessionId);
-            config["session"] = sessionId;
+            config["authToken"] = sessionId;
             res.send(config).status(200);
         });
 
