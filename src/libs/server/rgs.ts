@@ -48,7 +48,7 @@ export class RGS {
 
             const code = `${player}-${gameCode}`
             //const sessionId = this.ids.has(code) ? this.ids.get(code) : code+"-"+req.socket.remoteAddress+"-"+"uuidv4()";
-            const sessionId = this.ids.has(code) ? this.ids.get(code) : code + "-" + "uuidv4()";
+            const sessionId = this.ids.has(code) ? this.ids.get(code) : code + "-" + uuidv4();
             let state = null;
             if (this.ids.has(code)) {
                 state = this.states.get(sessionId);
