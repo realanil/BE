@@ -7,6 +7,7 @@ import { ConfigResponseModel } from "./config_response_model";
 import { PlayResponseModel } from "./play_response_model";
 import { RequestModel } from "./request_model";
 import { ServerResponseModel } from "./server_response_model";
+import { IRandom } from "../../engine/generic/rng/random";
 
 export class BaseSlotGame {
 
@@ -15,7 +16,7 @@ export class BaseSlotGame {
    
     protected math: PlatformMath;
     protected state: SlotState;
-    protected rng: NodeRNG;
+    protected rng: IRandom;
 
     constructor( name:string, version:string ) {
         this.name = name;
@@ -85,7 +86,7 @@ export class BaseSlotGame {
         this.rng.setCheat( request.cheat );
         this.executePlay( request.action );
 
-        // this.state.cheatNums = this.rng.getAndResetUsedNums();
+        this.state.cheatNums = this.rng.getUsedNums();
         if (this.state.gameStatus.nextAction.includes('spin') ) {
             this.state.cheatNums = this.rng.getAndResetUsedNums();
             response.win = new BigNumber(this.state.gameStatus.totalWin).toNumber();

@@ -14,6 +14,9 @@ export class LineWinEvaluator {
 
         for (let reel :number = 0; reel < grid.length; reel++) {
             const currSymbolId :number = grid[reel][ offsets[reel]];
+            if ( info.skipEval.includes( currSymbolId) ) {
+                break;
+            }
             const isSymbolWild :boolean = info.wildSymbols.includes( currSymbolId); 
 
             if (symbolId == -1 && isSymbolWild) {
@@ -65,9 +68,11 @@ export class LineWinEvaluator {
             payout.offsets = this.getOffSet( consecutiveWildCount, offsets);
             payout.pay = wildWin.multipliedBy(stake);
         } else {
+            if ( symbolOccurrenceCount > 2 && (symbolId == 9 || symbolId == 10) ) {
+            }
             payout.symbol = symbolId;
             payout.offsets = this.getOffSet( symbolOccurrenceCount , offsets);
-            payout.pay = symbolWin.multipliedBy(stake);
+            payout.pay = BigNumber(symbolWin).multipliedBy(BigNumber(stake));
         }
 
         return payout;

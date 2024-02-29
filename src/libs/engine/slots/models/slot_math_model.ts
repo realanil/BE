@@ -38,6 +38,7 @@ export class SlotInfoMath {
     public wildSymbols:number[] = [];
     public payLines:number[][] = [];
     public symbols:SlotSymbolsMath[] = [];
+    public skipEval:number[] = [];
 }
 
 class SlotSymbolsMath {

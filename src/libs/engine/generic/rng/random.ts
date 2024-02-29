@@ -1,6 +1,9 @@
 export interface IRandom {
     getRandom : (req : RandomObj) => RandomObj;
     getRandoms : (req : RandomObj[]) => RandomObj[];
+    getAndResetUsedNums : () => number[];
+    getUsedNums : () => number[]; 
+    setCheat : ( cheat :number[] ) => void;
 }
 
 export class RandomObj {

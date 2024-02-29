@@ -24,7 +24,7 @@ export class PlayResponseV2Model extends ResponseModel {
             default:break;
         }
 
-        this.parseGameState( state.gameStatus, spins, state.freespin );
+        this.parseGameState( state.gameStatus, spins, state.freespin, state.respin );
         this.parseGameResult( spins, math.defaultgrid, state.cheatNums );
     }
 
@@ -61,7 +61,7 @@ export class PlayResponseV2Model extends ResponseModel {
                     scatterWin = scatterWin.plus( feature.pay);
                     this.results.win.scatterWin.scatters.push( {
                         "smbID":feature.symbol, "amt":feature.pay, "num":feature.offsets?.length ,
-                        "bonusWon": titles[feature.id], "bonusWonValue":feature.count
+                        "bonusWon": titles[feature.id], "bonusWonValue":feature.count, "offsets": feature.offsets
                     })
                 }
             })
@@ -98,15 +98,20 @@ export class PlayResponseV2Model extends ResponseModel {
         this.bets.buyIn = buybonus?.isBonusSpin ? true : false;
     }
 
-    protected parseGameState(status:GameStatus, spin:SlotSpinState[], feature:FeatureDetails) {
+    protected parseGameState(status:GameStatus, spin:SlotSpinState[], freespin:FeatureDetails, respin:FeatureDetails) {
         this.state = new GameV2StateResponse();
         this.state.status = this.getGameStatus( status );
         this.state.totalWin = new BigNumber(status.totalWin).toNumber();
 
-        if (feature) {
-            this.state.totalFSAwarded = feature.total;
-            this.state.freespinsRemaining = feature.left;
-            this.state.wonAdditionalSpins = feature.retrigger;
+        if (freespin) {
+            this.state.totalFSAwarded = freespin.total;
+            this.state.freespinsRemaining = freespin.left;
+            this.state.wonAdditionalSpins = freespin.retrigger;
+        }
+
+        if (respin) {
+            this.state.totalRSAwarded = respin.total;
+            this.state.respinsRemaining = respin.left;
         }
         
         if ( spin && spin.length > 0 ) {    ;
@@ -181,6 +186,8 @@ class GameV2StateResponse {
     public totalFSAwarded:number = 0;
     public freespinsRemaining:number = 0;
     public wonAdditionalSpins:number = 0;
+    public totalRSAwarded:number = 0;
+    public respinsRemaining:number = 0;
     public totalWin:number = 0;
     public mult:number = 1;
     public feature = null;

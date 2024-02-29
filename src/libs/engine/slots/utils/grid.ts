@@ -60,6 +60,17 @@ export class Grid {
         return offsets;
     }
 
+    static ExpandSymbolInReels(symbol :number, grid :number[][]) :number[][] {
+        const offsets :number[] = Grid.FindScatterOffsets( symbol, grid);
+        const newgrid = Cloner.CloneGrid( grid);
+        offsets.forEach( offset => {
+            const col :number = offset % grid.length; 
+            newgrid[col].fill( symbol); 
+        })
+
+        return newgrid;
+    }
+
     static FindScatterOffsetsInReels(symbol :number, reels: number[], grid :number[][]) :number[] {
         const offsets :number[] = [];
         for (let i :number = 0; i < reels.length; i++) {

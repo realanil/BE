@@ -29,13 +29,17 @@ export class NodeRNG implements IRandom {
         this.usedNums = []; 
         return nums;
     }
+    getUsedNums() :number[] {
+        const nums = Cloner.CloneObject( this.usedNums);
+        return nums;
+    }
 
     setCheat( cheat :number[] ){ 
         if (process.env.CHEATS === "true") {
-            this.cheat = [];
             if (cheat === null || cheat === undefined || cheat.length === 0) {
                 return;
             }
+            this.cheat = [];
             this.cheat = cheat;
         }
     }

@@ -53,6 +53,7 @@ class ConfigResponse {
     public allowedCommands :string[];
     public isRestore :boolean;
     public state;
+    public transition;
     public gameOptions;
     public requestCommand :string;
 
@@ -61,8 +62,9 @@ class ConfigResponse {
         this.settings = {};
         this.configuration = new ConfigurationResponse( math, state);
         this.allowedCommands = state.gameStatus.nextAction;
-        this.isRestore = false;
+        this.isRestore = !state.gameStatus.nextAction.includes("spin");
         this.state = new StateResponse( name, math, state, math.info.gridLayout.length, true );
+        this.transition = new StateResponse( name, math, state, math.info.gridLayout.length, false);
         this.gameOptions = gameOptions;
         this.gameOptions.autoPlaySpinSteps = math.autoPlayValues;
         this.requestCommand = command;
@@ -74,7 +76,7 @@ class StateResponse {
     public bet;
     public balance;
     public totalWin;
-    public winOfRound :{ credits:BigNumber};
+    public winOfRound :{ credits:number};
 
     constructor( name:string, math:PlatformMath, state:SlotState, gridsize:number, renderState:boolean) {
         const symbols :string[] = []
@@ -83,20 +85,26 @@ class StateResponse {
         })
 
         this.bet = state.gameStatus.totalBet;
-        this.totalWin = state.gameStatus.totalWin;
+        this.totalWin = renderState ? BigNumber(state.gameStatus.totalWin).minus( BigNumber(state.gameStatus.currentWin) ) : state.gameStatus.totalWin;
+        
         const spins: SlotSpinState[] = renderState ? getPrevActionSpins(state) : getActionSpins( state); 
-        const lastspin: {win:BigNumber} = spins.length > 0 ? spins[ spins.length-1 ] : { win: BigNumber(0) };
+        const lastspin: {win:BigNumber} = spins && spins.length > 0 ? spins[ spins.length-1 ] : { win: BigNumber(0) };
+ 
         this[name.toLowerCase() ] = {
             subSpins : spins?.length > 0 ? this.renderSubSpins( symbols, spins, gridsize) : [], 
             basicWin : { credits : lastspin.win, winFactor : lastspin.win }
         }
-        this.winOfRound = { credits:lastspin.win };
-        if (state.freespin) {
-            this.winOfRound["freeGames"] = BigNumber(state.freespin.accumulated).minus( lastspin.win);
+        this.winOfRound = { credits: BigNumber(lastspin.win).toNumber() };
+        if (state.freespin ) {
+            this.winOfRound["freeGames"] = (BigNumber(state.freespin.accumulated).minus( lastspin.win)).toNumber();
             this[name.toLowerCase() ]["freeGame"] = { totalNumber :state.freespin.total, currentNumber : state.freespin.total - state.freespin.left };
-            if ( renderState) {
-                this[name.toLowerCase() ]["freeGame"]["currentNumber"]--;
-            }
+            if ( renderState ) { 
+                if ( state.gameStatus.action !== "spin") {
+                    this[name.toLowerCase() ]["freeGame"]["currentNumber"]--;
+                } else {
+                    delete this[name.toLowerCase() ]["freeGame"]["currentNumber"];
+                }
+            } 
         }
     }
 
@@ -133,13 +141,13 @@ class SubSpins {
 
 class Winnings {
 
-    public credits:BigNumber;
+    public credits:number;
     public multiplier:number;
     public positions:number[][];
     public paytable;
 
     constructor(symbols:string[], spin:SlotSpinState, gridsize:number ) {
-        this.credits = spin.win;
+        this.credits = BigNumber(spin.win).toNumber();
         this.multiplier = spin.multiplier;
         const positions: number[] = Symbols.UniqueWinningSymbols( spin.wins);
         this.positions = [];
@@ -183,14 +191,14 @@ class ConfigurationResponse {
 
 class PaytableResponse {
 
-    public betStep: BigNumber;
-    public payoutsPerBetStepAndSymbol: { symbolId:string, paytable:BigNumber[]}[]
+    public betStep: number;
+    public payoutsPerBetStepAndSymbol: { symbolId:string, paytable:number[]}[]
 
     constructor(  math:SlotInfoMath, stake:number, multiplier:BigNumber) {
-        this.betStep = BigNumber(stake).multipliedBy(multiplier);
+        this.betStep = (BigNumber(stake).multipliedBy(multiplier)).toNumber();
         this.payoutsPerBetStepAndSymbol = [];
         math.symbols.forEach( symbol => {
-            this.payoutsPerBetStepAndSymbol.push( { symbolId:symbol.name, paytable:symbol.payout.map( e => e.multipliedBy( this.betStep) ) } )
+            this.payoutsPerBetStepAndSymbol.push( { symbolId:symbol.name, paytable:symbol.payout.map( e => e.multipliedBy( this.betStep).toNumber() ) } )
         })
     }
 }

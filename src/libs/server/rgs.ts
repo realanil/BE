@@ -47,9 +47,7 @@ export class RGS {
             }
 
             const code = `${player}-${gameCode}`
-            //const sessionId = this.ids.has(code) ? this.ids.get(code) : code+"-"+req.socket.remoteAddress+"-"+"uuidv4()";
-            const sessionId = this.ids.has(code) ? this.ids.get(code) : code + "-" + uuidv4();
-            //const sessionId = this.ids.has(code) ? this.ids.get(code) : "b@nanza321";
+            const sessionId = this.ids.has(code) ? this.ids.get(code) : code + "-" + "uuidv4()";
             let state = null;
             if (this.ids.has(code)) {
                 state = this.states.get(sessionId);
@@ -71,13 +69,15 @@ export class RGS {
                     .forEach(key => this.ids.delete(key))
             }
             res.setHeader("session", sessionId);
-            config["authToken"] = sessionId;
+            config["session"] = sessionId;
             res.send(config).status(200);
         });
 
         this.app.post('/:gameCode/play', (req: Request, res: Response) => {
             const gameCode = req.params.gameCode;
             const sessionid: string = req.header("session");
+            
+           
 
             const sessionDetails: string[] = sessionid.split("-");
             if (sessionDetails[1] !== gameCode) {
