@@ -17,7 +17,9 @@ glob(`./src/games/*/*.ts`).then(async servFiles => {
         //for local
         //const tsfile = servFiles[i].split('src\\')[1];
 
+        //for Cloud
         const tsfile = servFiles[i].split('src/')[1];
+
         console.log("tsfile", tsfile);
 
         const servClass = tsfile.split(".")[0]
@@ -26,7 +28,9 @@ glob(`./src/games/*/*.ts`).then(async servFiles => {
         //for local
         //const id: string = servFiles[i].split('\\')[2]
 
+        //for Cloud
         const id: string = servFiles[i].split('/')[2]
+
         console.log(id, engine, servFiles[i]);
         engines.set(id, new engine.GameServer())
     }
