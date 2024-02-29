@@ -4,20 +4,20 @@ import { SlotInfoMath } from "../models/slot_math_model";
 
 export class LineWinEvaluator {
 
-    public calculateWins(info :SlotInfoMath, grid :number[][], line :number, stake :BigNumber) :SlotSpinWinsState {
-        let symbolOccurrenceCount :number = 0;
-        let consecutiveWildCount :number = 0;
-        let symbolId :number = -1;
-        let wildSymbolId :number = -1;
-        let isWildInclude :boolean = false;
-        let offsets :number[] = info.payLines[line];
+    public calculateWins(info: SlotInfoMath, grid: number[][], line: number, stake: BigNumber): SlotSpinWinsState {
+        let symbolOccurrenceCount: number = 0;
+        let consecutiveWildCount: number = 0;
+        let symbolId: number = -1;
+        let wildSymbolId: number = -1;
+        let isWildInclude: boolean = false;
+        let offsets: number[] = info.payLines[line];
 
-        for (let reel :number = 0; reel < grid.length; reel++) {
-            const currSymbolId :number = grid[reel][ offsets[reel]];
-            if ( info.skipEval.includes( currSymbolId) ) {
+        for (let reel: number = 0; reel < grid.length; reel++) {
+            const currSymbolId: number = grid[reel][offsets[reel]];
+            if (info.skipEval.includes(currSymbolId)) {
                 break;
             }
-            const isSymbolWild :boolean = info.wildSymbols.includes( currSymbolId); 
+            const isSymbolWild: boolean = info.wildSymbols.includes(currSymbolId);
 
             if (symbolId == -1 && isSymbolWild) {
                 symbolOccurrenceCount++;
@@ -43,44 +43,44 @@ export class LineWinEvaluator {
             }
         }
 
-        let wildWin :BigNumber = new BigNumber(0);
-        let symbolWin :BigNumber = new BigNumber(0);
-        info.symbols.forEach( symbol => {
+        let wildWin: BigNumber = new BigNumber(0);
+        let symbolWin: BigNumber = new BigNumber(0);
+        info.symbols.forEach(symbol => {
             if (symbol.payout.length === 0) {
                 return;
             }
 
-            if ( symbol.id === wildSymbolId ) {
-                wildWin = symbol.payout[ consecutiveWildCount];
+            if (symbol.id === wildSymbolId) {
+                wildWin = symbol.payout[consecutiveWildCount];
             }
-            if ( symbol.id === symbolId ) {
-                symbolWin = symbol.payout[ symbolOccurrenceCount];
+            if (symbol.id === symbolId) {
+                symbolWin = symbol.payout[symbolOccurrenceCount];
             }
         });
-        
-        const payout :SlotSpinWinsState = new SlotSpinWinsState();
+
+        const payout: SlotSpinWinsState = new SlotSpinWinsState();
         payout.id = line + 1;
         payout.type = "line";
         payout.wildIncluded = isWildInclude;
 
-        if (wildWin.isGreaterThan(symbolWin) ){
+        if (wildWin.isGreaterThan(symbolWin)) {
             payout.symbol = wildSymbolId;
-            payout.offsets = this.getOffSet( consecutiveWildCount, offsets);
+            payout.offsets = this.getOffSet(consecutiveWildCount, offsets);
             payout.pay = wildWin.multipliedBy(stake);
         } else {
-            if ( symbolOccurrenceCount > 2 && (symbolId == 9 || symbolId == 10) ) {
+            if (symbolOccurrenceCount > 2 && (symbolId == 9 || symbolId == 10)) {
             }
             payout.symbol = symbolId;
-            payout.offsets = this.getOffSet( symbolOccurrenceCount , offsets);
+            payout.offsets = this.getOffSet(symbolOccurrenceCount, offsets);
             payout.pay = BigNumber(symbolWin).multipliedBy(BigNumber(stake));
         }
 
         return payout;
     }
 
-    protected getOffSet( length :number, payLine :number[]) : number[] {
-        const offSet :number[] = [];
-        for (let i :number = 0; i < length; i++) {
+    protected getOffSet(length: number, payLine: number[]): number[] {
+        const offSet: number[] = [];
+        for (let i: number = 0; i < length; i++) {
             offSet[i] = (payLine.length * payLine[i]) + i;
         }
         return offSet;

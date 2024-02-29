@@ -4,17 +4,17 @@ import { FeatureDetails, SlotFeaturesState, SlotSpinState, SlotState } from "../
 
 export class Triggerer {
 
-    static UpdateNextAction( state :SlotState, action :SlotActionMath){
-        if ( action.triggers.includes( "freespin") || action.triggers.includes( "respin") || action.triggers.includes( "freerespin") ) {
+    static UpdateNextAction(state: SlotState, action: SlotActionMath) {
+        if (action.triggers.includes("freespin") || action.triggers.includes("respin") || action.triggers.includes("freerespin")) {
             state.gameStatus.nextAction = action.triggers;
         }
     }
 
-    static UpdateFeature( state :SlotState, feature :SlotFeaturesState, action :SlotActionMath ){
+    static UpdateFeature(state: SlotState, feature: SlotFeaturesState, action: SlotActionMath) {
         feature.triggers = action.triggers;
         feature.count = action.spins;
-        
-        if ( action.triggers.includes( "freespin") ) {
+
+        if (action.triggers.includes("freespin")) {
             state.freespin = new FeatureDetails();
             state.freespin.left = action.spins;
             state.freespin.total = action.spins;
@@ -23,7 +23,7 @@ export class Triggerer {
             state.freespins = [];
         }
 
-        if ( action.triggers.includes( "respin") ) {
+        if (action.triggers.includes("respin")) {
             state.respin = new FeatureDetails();
             state.respin.left = action.spins;
             state.respin.total = action.spins;
@@ -32,7 +32,7 @@ export class Triggerer {
             state.respins = [];
         }
 
-        if ( action.triggers.includes( "freerespin") ) {
+        if (action.triggers.includes("freerespin")) {
             state.freerespin = new FeatureDetails();
             state.freerespin.left = action.spins;
             state.freerespin.total = action.spins;
@@ -40,8 +40,8 @@ export class Triggerer {
             state.freerespin.accumulated = new BigNumber(0);
             state.freerespins = [];
         }
-        
-        if ( action.triggers.includes( "retrigger") ) {
+
+        if (action.triggers.includes("retrigger")) {
             state.freespin.left += action.spins;
             state.freespin.total += action.spins;
             state.freespin.retrigger = action.spins;
