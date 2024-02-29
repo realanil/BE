@@ -1,6 +1,0 @@
-node_modules
-package-lock.json
-# src/games/
-*_tester.ts 
-build/
-OLA*
