@@ -25,7 +25,7 @@ import { ScatterSymbolCount } from "../../libs/engine/slots/conditions/scatter_s
 export class GameServer extends BaseSlotGame {
 
     constructor(){
-        super("Vikinng", "0.5");
+        super("Vikinng", "0.6");
         this.math = new VikingMath();
     }
 
@@ -105,7 +105,7 @@ export class GameServer extends BaseSlotGame {
 
         state.wins = EvaluateWins.LineWins( this.math.info, state.finalGrid, this.state.gameStatus.stakeValue );
         state.win = CalculateWins.AddPays( state.wins );
-        
+
         let feature = ScatterSymbolCount.checkCondition( this.math.conditions["FreespinTrigger"], state );
         while( !feature.isActive || state.win.isGreaterThan(0) ){
             state.stops = CreateStops.StandardStops(this.rng, selectedSet.reels, this.math.info.gridLayout );
@@ -308,7 +308,6 @@ export class GameServer extends BaseSlotGame {
 
         holdspin.isActive = true;
         state.features = [holdspin];  
-        
         this.state.freerespins.push([state]);
     }
 

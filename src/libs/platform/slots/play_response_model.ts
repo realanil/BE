@@ -4,19 +4,19 @@ import { ResponseModel } from "../base/response_model";
 
 export class PlayResponseModel extends ResponseModel {
 
-    public reelId: string = null;
-    public grid: number[][] = [];
-    public initialGrid: number[][] = [];
-    public multiplier: number;
-    public wins: PlaySlotWinsResponse[] = [];
-    public win: BigNumber = new BigNumber(0);
-    public subspins: SubSpinResponse[];
-    public feature: FeatureResponse;
-    public status: StatusResponse;
-    public spinFeatures: SpinFeatureResponse[] = null;
-    public cheats: number[] = null;
+    public reelId :string = null;
+    public grid :number[][] = [];
+    public initialGrid :number[][] = [];
+    public multiplier :number;
+    public wins :PlaySlotWinsResponse[] = []; 
+    public win :BigNumber = new BigNumber(0);
+    public subspins :SubSpinResponse[];
+    public feature :FeatureResponse;
+    public status :StatusResponse;
+    public spinFeatures : SpinFeatureResponse[] = null;
+    public cheats :number[] = null;
 
-    constructor(version: string, name: string, error: string, state: SlotState) {
+    constructor( version:string, name:string, error :string, state:SlotState ) {
         super(version, name, error);
 
         if (error !== null) { return; }
@@ -33,24 +33,24 @@ export class PlayResponseModel extends ResponseModel {
         this.win = state.paidSpin[0].win;
         this.multiplier = state.paidSpin[0].multiplier;
         this.wins = [];
-        state.paidSpin[0].wins.forEach(win => {
-            this.wins.push(new PlaySlotWinsResponse(win.id, win.symbol, win.type, win.offsets, win.pay, win.wildIncluded));
+        state.paidSpin[0].wins.forEach( win => {
+            this.wins.push( new PlaySlotWinsResponse( win.id, win.symbol, win.type, win.offsets, win.pay, win.wildIncluded) );
         });
 
         this.spinFeatures = [];
-        state.paidSpin[0].features.forEach(feature => {
+        state.paidSpin[0].features.forEach( feature => {
             if (feature.isActive) {
-                const featureResp: SpinFeatureResponse = new SpinFeatureResponse();
+                const featureResp :SpinFeatureResponse = new SpinFeatureResponse();
                 featureResp.active = feature.isActive;
                 featureResp.symbol = feature.symbol;
                 featureResp.id = feature.id;
                 featureResp.offsets = feature.offsets;
                 featureResp.level = feature.level;
-                this.spinFeatures.push(featureResp);
+                this.spinFeatures.push(featureResp );
             }
         })
 
-        if (state.freespin !== null && state.freespin !== undefined) {
+        if (state.freespin !== null && state.freespin !== undefined){
             this.feature = new FeatureResponse();
             this.feature.left = state.freespin.left;
             this.feature.total = state.freespin.total;
@@ -59,21 +59,21 @@ export class PlayResponseModel extends ResponseModel {
 
         if (state.paidSpin.length > 1) {
             this.subspins = [];
-            for (let i = 1; i < state.paidSpin.length; i++) {
-                const subspin: SubSpinResponse = new SubSpinResponse();
+            for (let i=1; i<state.paidSpin.length; i++ ) {
+                const subspin :SubSpinResponse = new SubSpinResponse();
                 subspin.grid = state.paidSpin[i].finalGrid;
                 subspin.win = state.paidSpin[i].win;
                 subspin.wins = [];
-                state.paidSpin[i].wins.forEach(win => {
-                    subspin.wins.push(new PlaySlotWinsResponse(win.id, win.symbol, win.type, win.offsets, win.pay, win.wildIncluded));
+                state.paidSpin[i].wins.forEach( win => {
+                    subspin.wins.push( new PlaySlotWinsResponse( win.id, win.symbol, win.type, win.offsets, win.pay, win.wildIncluded) );
                 });
-
+                
                 subspin.id = state.paidSpin[i].cascade.id;
                 subspin.offsets = state.paidSpin[i].cascade.offsets;
                 subspin.type = state.paidSpin[i].cascade.type;
                 subspin.prevWin = state.paidSpin[i].cascade.win;
                 subspin.multiplier = state.paidSpin[i].multiplier;
-                this.subspins.push(subspin);
+                this.subspins.push( subspin);
             }
         }
 
@@ -81,53 +81,53 @@ export class PlayResponseModel extends ResponseModel {
     }
 }
 
-class StatusResponse {
-    public action: string;
-    public nextAction: string[] = [];
-    public totalBet: BigNumber;
-    public totalWin: BigNumber;
+class StatusResponse{
+    public action :string;
+    public nextAction :string[] = [];
+    public totalBet :BigNumber;
+    public totalWin :BigNumber;
 }
 
 class SubSpinResponse {
-    public id: number;
-    public grid: number[][] = [];
-    public wins: PlaySlotWinsResponse[] = [];
-    public win: BigNumber = new BigNumber(0);
-    public offsets: number[] = [];
-    public type: string;
-    public multiplier: number;
-    public prevWin: BigNumber = new BigNumber(0);
+    public id :number;
+    public grid :number[][] = [];
+    public wins :PlaySlotWinsResponse[] = []; 
+    public win :BigNumber = new BigNumber(0);
+    public offsets :number[] = [];
+    public type :string;
+    public multiplier :number;
+    public prevWin :BigNumber = new BigNumber(0);
 }
 
 class FeatureResponse {
-    public total: number;
-    public left: number;
-    public accumulated: BigNumber;
+    public total :number;
+    public left :number;
+    public accumulated :BigNumber;
 }
 
 class SpinFeatureResponse {
-    public id: string = null;
-    public active: boolean;
-    public symbol: number;
-    public offsets: number[] = null;
-    public level: string = null;
+    public id :string  = null;
+    public active :boolean;
+    public symbol :number;
+    public offsets :number[]  = null;
+    public level :string = null;
 }
 
 class PlaySlotWinsResponse {
 
-    public id: number;
-    public symbol: number;
-    public type: string;
-    public offsets: number[];
-    public pay: BigNumber;
-    public wildIncluded: boolean;
+    public id :number;
+    public symbol :number;
+    public type :string;
+    public offsets :number[];
+    public pay :BigNumber;
+    public wildIncluded :boolean;
 
-    constructor(id: number, symbol: number, type: string, offsets: number[], pay: BigNumber, wildIncluded: boolean) {
+    constructor( id :number, symbol :number, type :string, offsets :number[], pay :BigNumber, wildIncluded :boolean ) {
         this.id = id;
         this.symbol = symbol;
         this.type = type;
         this.offsets = offsets;
-        this.pay = new BigNumber(0).plus(pay);
+        this.pay = new BigNumber(0).plus( pay);
         this.wildIncluded = wildIncluded;
     }
 

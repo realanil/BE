@@ -4,9 +4,9 @@ import { RandomHelper } from "../utils/random";
 
 export class CreateGrid {
 
-    static StandardGrid(reelSet: number[][], stops: number[][]): number[][] {
-        const colLen: number = stops.length;
-        const grid: number[][] = [];
+    static StandardGrid( reelSet:number[][], stops:number[][]) : number[][] {
+        const colLen:number = stops.length;
+        const grid:number[][] = [];
         for (let col = 0; col < colLen; col++) {
             grid[col] = [];
             for (let row = 0; row < stops[col].length; row++) {
@@ -16,13 +16,25 @@ export class CreateGrid {
         return grid;
     }
 
-    static WeightedSymbolGrid(rng: IRandom, reelSet: WeightedSymbols[], layout: number[]): number[][] {
+    static StandardGridForNonNull( grid:number[][], reelSet:number[][], stops:number[][]) : number[][] {
+        const colLen:number = stops.length;
+        for (let col = 0; col < colLen; col++) {
+            for (let row = 0; row < stops[col].length; row++) { 
+                if (grid[col][row] === -1) {
+                    grid[col][row] = reelSet[col][stops[col][row]];
+                }
+            }
+        }
+        return grid;
+    }
+
+    static WeightedSymbolGrid(rng:IRandom, reelSet:WeightedSymbols[], layout:number[]) : number[][] {
         const grid = [];
-        layout.forEach((reel, index) => {
+        layout.forEach( (reel, index) => {
             grid[index] = [];
-            for (let i = 0; i < reel; i++) {
-                const symbol: WeightedSymbols = RandomHelper.GetRandomFromList(rng, reelSet) as WeightedSymbols;
-                grid[index].push(symbol.symbol);
+            for (let i=0; i<reel; i++) {
+                const symbol :WeightedSymbols = RandomHelper.GetRandomFromList(rng, reelSet) as WeightedSymbols;
+                grid[index].push( symbol.symbol);
             }
         })
         return grid;
