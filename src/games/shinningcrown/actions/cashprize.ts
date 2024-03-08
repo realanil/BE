@@ -20,11 +20,11 @@ export class CashPrize {
     }
 
     static FullHouse( state: ShinningCrownState) {
-        // state.cashPrizes.forEach( prize => {
-        //     if ( prize.id.includes("XBET") ) {
-        //         // prize.multiplier *= 2;
-        //     }
-        // })
+        state.cashPrizes.forEach( prize => {
+            if ( prize.id.includes("XBET") ) {
+                prize.multiplier *= 2;
+            }
+        })
     }
 
     static CoinsMultiplier( rng :IRandom, coins :SlotFeaturesState,  state :ShinningCrownState ) {

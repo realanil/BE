@@ -86,9 +86,9 @@ export class ShinningCrownMath extends PlatformMath {
         this.actions["respin"] = { triggers: ["respin"], id: "respin", spins: 3 };
 
         this.xBetMath = [
-            { id:"XBET 1", weight:830, multiplier:1 },
-            { id:"XBET 2", weight:800, multiplier:2 },
-            { id:"XBET 3", weight:900, multiplier:3 },
+            { id:"XBET 1", weight:1000, multiplier:1 },
+            { id:"XBET 2", weight:1000, multiplier:2 },
+            { id:"XBET 3", weight:1000, multiplier:3 },
             { id:"XBET 4", weight:500, multiplier:4 },
             { id:"XBET 5", weight:500, multiplier:5 },
             { id:"XBET 6", weight:500, multiplier:6 },
@@ -102,7 +102,9 @@ export class ShinningCrownMath extends PlatformMath {
         ],
 
         this.cashMath = [
-            { id:"XBET", weight: 99988, multiplier: this.xBetMath, repeat:true } 
+            { id:"XBET", weight: 99988, multiplier: this.xBetMath, repeat: true },
+            { id:"Big", weight: 10, multiplier: 1000, repeat: false } ,
+            { id:"Grand", weight: 2, multiplier: 5000, repeat: false } 
         ]
 
     }

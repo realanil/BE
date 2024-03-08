@@ -18,7 +18,7 @@ import { UpdateFeature } from "../../libs/engine/slots/features/update_feature";
 import { RandomObj } from "../../libs/engine/generic/rng/random";
 import { SlotConditionMath } from "../../libs/engine/slots/models/slot_math_model";
 import { ShinningCrownMath } from "./models/shinningcrown_math";
-import { ShinningCrownResponseModel } from "./models/shinningcrown_response";
+import { ShinningCrownConfigResponseV2Model, ShinningCrownResponseModel } from "./models/shinningcrown_response";
 import { ShinningCrownState } from "./models/shinningcrown_state";
 import { CashPrize } from "./actions/cashprize";
 import { Symbols } from "../../libs/engine/slots/utils/symbols";
@@ -26,7 +26,7 @@ import { Symbols } from "../../libs/engine/slots/utils/symbols";
 export class GameServer extends BaseSlotGame {
 
     constructor(){
-        super("Shinning Crown", "0.2");
+        super("Shinning Crown", "0.5");
         this.math = new ShinningCrownMath();
     }
 
@@ -87,13 +87,15 @@ export class GameServer extends BaseSlotGame {
         state.win = BigNumber(0);
 
         const coins:SlotFeaturesState = ScatterSymbolCount.checkCondition( this.math.conditions["HoldSpin"], state);
+        CashPrize.CoinsMultiplier( this.rng, coins, this.state as ShinningCrownState );
+
         coins.isActive = (coins.offsets.length > prevState.features[0].offsets.length ) && coins.offsets.length < 15;
         if (coins.isActive) {
-            CashPrize.CoinsMultiplier( this.rng, coins, this.state as ShinningCrownState );
             Triggerer.UpdateFeature(this.state, coins, this.math.actions["respin"]); 
         } else {
             UpdateFeature.updateReSpinCount( this.state);
             if ( this.state.respin.left === 0 || coins.offsets.length === 15) {
+                this.state.respin.left = 0;
                 this.state.gameStatus.nextAction = ["spin"];
                 if (coins.offsets.length === 15) {
                     CashPrize.FullHouse( this.state as ShinningCrownState); 
@@ -117,7 +119,7 @@ export class GameServer extends BaseSlotGame {
     }
 
     protected getConfigResponse( response:PlayResponseModel):ResponseModel {
-        return new ConfigResponseV2Model( this.version, this.name, this.math, this.state);
+        return new ShinningCrownConfigResponseV2Model( this.version, this.name, this.math, this.state as ShinningCrownState);
     }
 
     protected defaultEmptyState():ShinningCrownState{
