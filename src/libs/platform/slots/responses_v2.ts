@@ -24,7 +24,7 @@ export class PlayResponseV2Model extends ResponseModel {
             default:break;
         }
 
-        this.parseGameState( state.gameStatus, spins, state.freespin, state.respin );
+        this.parseGameState( state.gameStatus, spins, state.freespin, state.respin, state.freerespin );
         this.parseGameResult( spins, math.defaultgrid, state.cheatNums );
     }
 
@@ -98,7 +98,7 @@ export class PlayResponseV2Model extends ResponseModel {
         this.bets.buyIn = buybonus?.isBonusSpin ? true : false;
     }
 
-    protected parseGameState(status:GameStatus, spin:SlotSpinState[], freespin:FeatureDetails, respin:FeatureDetails) {
+    protected parseGameState(status:GameStatus, spin:SlotSpinState[], freespin:FeatureDetails, respin:FeatureDetails, freerespin:FeatureDetails) {
         this.state = new GameV2StateResponse();
         this.state.status = this.getGameStatus( status );
         this.state.totalWin = new BigNumber(status.totalWin).toNumber();
@@ -113,6 +113,14 @@ export class PlayResponseV2Model extends ResponseModel {
             this.state.totalRSAwarded = respin.total;
             this.state.respinsRemaining = respin.left;
         }
+
+        if (freerespin) {
+            this.state.totalFSRSAwarded = freerespin.total;
+            this.state.freerespinsRemaining = freerespin.left;
+        }
+
+        this.state.currentAction = status.action;
+        this.state.expectedActions = status.nextAction;
         
         if ( spin && spin.length > 0 ) {    ;
             this.state.reelSet = spin[0].reelId;
@@ -180,6 +188,8 @@ class GameV2ResultsResponse {
 }
 
 class GameV2StateResponse {
+    public currentAction:string;
+    public expectedActions:string[];
     public reelSet:string;
     public status:string;
     public preMult:number = 1;
@@ -188,6 +198,8 @@ class GameV2StateResponse {
     public wonAdditionalSpins:number = 0;
     public totalRSAwarded:number = 0;
     public respinsRemaining:number = 0;
+    public totalFSRSAwarded:number = 0;
+    public freerespinsRemaining:number = 0;
     public totalWin:number = 0;
     public mult:number = 1;
     public feature = null;
