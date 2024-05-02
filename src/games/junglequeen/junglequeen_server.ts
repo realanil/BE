@@ -26,7 +26,7 @@ import { SlotConditionMath } from "../../libs/engine/slots/models/slot_math_mode
 export class GameServer extends BaseSlotGame {
 
     constructor(){
-        super("JungleQueen", "0.6");
+        super("JungleQueen", "0.9");
         this.math = new JungleQueenMath();
     }
 
@@ -175,7 +175,7 @@ export class GameServer extends BaseSlotGame {
         state.prevMultiplier = jqState.multiplier;
         jqState.prevMystryLevel = jqState.mystryLevel;        
     
-        const selectedSet:any = RandomHelper.GetRandomFromList( this.rng, this.math.freeReels );
+        const selectedSet:any = this.state.buybonus?.isBonusSpin ? RandomHelper.GetRandomFromList( this.rng, this.math.reSpinReels ) : RandomHelper.GetRandomFromList( this.rng, this.math.freeReels );
         state.reelId = selectedSet.id;
         state.stops = CreateStops.StandardStops(this.rng, selectedSet.reels, this.math.info.gridLayout );
         state.initialGrid = CreateGrid.StandardGrid( selectedSet.reels, state.stops);

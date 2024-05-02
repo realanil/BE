@@ -1,10 +1,17 @@
 import express from 'express';
 import { Request, Response } from 'express';
-import { BaseSlotGame } from '../platform/slots/base_slot_game';
 import BigNumber from 'bignumber.js';
 import { ServerResponseModel } from '../platform/slots/server_response_model';
 import { v4 as uuidv4 } from 'uuid';
+var http = require('http');
+var https = require('https');
 import cors from 'cors';
+
+// var fs = require('fs');
+// var privateKey  = fs.readFileSync('cert/localhost.decrypted.key', 'utf8');
+// var certificate = fs.readFileSync('cert/localhost.crt', 'utf8');
+
+// var credentials = {key: privateKey, cert: certificate};
 
 export class RGS {
 
@@ -13,12 +20,12 @@ export class RGS {
     balance: Map<string, BigNumber> = new Map();
 
     app: express.Application;
-    servers: Map<string, BaseSlotGame>
+    servers: Map<string, any>
 
     initial_balance: BigNumber;
     maximum_sessions: number;
 
-    constructor(gameServers: Map<string, BaseSlotGame>) {
+    constructor(gameServers: Map<string, any>) {
         this.initial_balance = process.env.INITIAL_BALANCE ? BigNumber(process.env.INITIAL_BALANCE) : BigNumber(1000);
         this.maximum_sessions = process.env.MAXIMUM_SESSIONS ? parseInt(process.env.MAXIMUM_SESSIONS) : 300;
 
@@ -32,13 +39,13 @@ export class RGS {
         this.app.post('/:gameCode/config', (req: Request, res: Response) => {
             const gameCode = req.params.gameCode;
 
-            let engine = this.servers.has(gameCode) ? this.servers.get(gameCode) : null;
-
-            if (engine === null || engine === undefined) {
+            let engineClass = this.servers.has(gameCode) ? this.servers.get(gameCode) : null;
+            if (engineClass === null || engineClass === undefined) {
                 res.send("invalid game code " + gameCode).status(404);
                 return;
             }
 
+            let engine = new engineClass()
 
             const player = req.body.player;
             if (player === null || player === undefined || player.length < 3 || player.length > 9) {
@@ -47,9 +54,7 @@ export class RGS {
             }
 
             const code = `${player}-${gameCode}`
-            //const sessionId = this.ids.has(code) ? this.ids.get(code) : code+"-"+req.socket.remoteAddress+"-"+"uuidv4()";
             const sessionId = this.ids.has(code) ? this.ids.get(code) : code + "-" + uuidv4();
-            //const sessionId = this.ids.has(code) ? this.ids.get(code) : "b@nanza321";
             let state = null;
             if (this.ids.has(code)) {
                 state = this.states.get(sessionId);
@@ -93,12 +98,13 @@ export class RGS {
             }
             const state = this.states.get(sessionid);
 
-            const engine = this.servers.has(gameCode) ? this.servers.get(gameCode) : null;
-
-            if (engine === null) {
+            let engineClass = this.servers.has(gameCode) ? this.servers.get(gameCode) : null;
+            if (engineClass === null || engineClass === undefined) {
                 res.send("invalid game code " + gameCode).status(404);
                 return;
             }
+
+            let engine = new engineClass()
 
             const stake: BigNumber = req.body.stake ? new BigNumber(req.body.stake) : BigNumber(0);
             const cheat = process.env.CHEATS === "true" ? req.body.cheat : [];
@@ -135,10 +141,17 @@ export class RGS {
         });
     }
 
-    start(port: string) {
-        this.app.listen(port, () => {
-            console.log(`listening at port ${port} `);
-        });
+    start(httpPort:string, httpsPort:string) {
+
+        var httpServer = http.createServer(this.app);
+        //var httpsServer = https.createServer(credentials, this.app);
+
+        httpServer.listen(httpPort);
+        //httpsServer.listen(httpsPort);
+        
+        // this.app.listen(port, () => {
+        //     console.log(`listening at port ${port} `);
+        // });
     }
 
 }

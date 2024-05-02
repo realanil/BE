@@ -29,6 +29,7 @@ export class BaseSlotGame {
     public config( state:any): ResponseModel {
         let response:ResponseModel = null;
         if (state && state.gameStatus && state.gameStatus.action !== "" && !state.gameStatus.nextAction.includes("spin")) {
+            this.state = state;
             response = this.getPlayResponse();
         }
         return this.getConfigResponse( response);

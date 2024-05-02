@@ -1,23 +1,23 @@
 const dotenv = require('dotenv');
-import { BaseSlotGame } from "../platform/slots/base_slot_game";
 import { RGS } from "./rgs";
 import { glob } from "glob";
 
 dotenv.config();
 
-const port: string = process.env.PORT ? process.env.PORT : "8080";
+const httpPort: string = process.env.HTTP_PORT ? process.env.HTTP_PORT : "8080";
+const httpsPort: string = process.env.HTTPS_PORT ? process.env.HTTPS_PORT : "8081";
 
 glob(`./src/games/*/*.ts`).then(async servFiles => {
 
-    const engines: Map<string, BaseSlotGame> = new Map();
+    const engines: Map<string, any> = new Map();
     console.log("servFiles", servFiles);
 
     for (let i = 0; i < servFiles.length; i++) {
-        console.log("servFiles[i]", i, servFiles[i]);
+
         //for local
         //const tsfile = servFiles[i].split('src\\')[1];
 
-        const tsfile = servFiles[i].split('src/')[1];
+        const tsfile = servFiles[i].split('src\\')[1];
         console.log("tsfile", tsfile);
 
         const servClass = tsfile.split(".")[0]
@@ -26,13 +26,13 @@ glob(`./src/games/*/*.ts`).then(async servFiles => {
         //for local
         //const id: string = servFiles[i].split('\\')[2]
 
-        const id: string = servFiles[i].split('/')[2]
-        console.log(id, engine, servFiles[i]);
-        engines.set(id, new engine.GameServer())
+        const id: string = servFiles[i].split('\\')[2]
+        console.log(i, id, engine);
+        engines.set(id, engine.GameServer )
     }
 
     const server = new RGS(engines);
-    server.start(port);
+    server.start( httpPort, httpsPort);
     console.log("start server")
 })
 
