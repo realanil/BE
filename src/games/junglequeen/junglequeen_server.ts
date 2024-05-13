@@ -26,7 +26,7 @@ import { SlotConditionMath } from "../../libs/engine/slots/models/slot_math_mode
 export class GameServer extends BaseSlotGame {
 
     constructor(){
-        super("JungleQueen", "0.9");
+        super("JungleQueen", "0.10");
         this.math = new JungleQueenMath();
     }
 
@@ -236,7 +236,7 @@ export class GameServer extends BaseSlotGame {
         
     }
 
-    protected getPlayResponse():ResponseModel {
+    protected getPlayResponse(): ResponseModel {
         return new JungleQueenResponseModel( this.version, this.name, this.math, this.state as JungleQueenState);
     }
 

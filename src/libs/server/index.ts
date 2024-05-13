@@ -4,8 +4,8 @@ import { glob } from "glob";
 
 dotenv.config();
 
-const httpPort: string = process.env.HTTP_PORT ? process.env.HTTP_PORT : "8080";
-const httpsPort: string = process.env.HTTPS_PORT ? process.env.HTTPS_PORT : "8081";
+const port: string = process.env.PORT ? process.env.PORT : "8080";
+//const httpsPort: string = process.env.HTTPS_PORT ? process.env.HTTPS_PORT : "8081";
 
 glob(`./src/games/*/*.ts`).then(async servFiles => {
 
@@ -33,7 +33,7 @@ glob(`./src/games/*/*.ts`).then(async servFiles => {
     }
 
     const server = new RGS(engines);
-    server.start(httpPort, httpsPort);
+    server.start(port);
     console.log("start server")
 })
 

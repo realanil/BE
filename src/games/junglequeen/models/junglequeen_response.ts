@@ -31,7 +31,7 @@ export class JungleQueenConfigResponseV2Model extends ConfigResponseV2Model {
             this.state["level"] = state.mystryLevel;
             this.state["prevlevel"] = state.prevMystryLevel;
         }
-        const playerAction:string = state.gameStatus.action === "spin" || state.gameStatus.action === "" ? "spin" : state.gameStatus.action;
+        const playerAction:string = ["spin", "buybonus", ""].includes(state.gameStatus.action) ? "spin" : state.gameStatus.action;
         const spins:SlotSpinState = playerAction === "spin"  ? state.paidSpin[0]:state.freespins[ state.freespins.length-1][0];
         spins?.features.forEach( feature => {
             if (feature.isActive && feature.id == "mystery") 
