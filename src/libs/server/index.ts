@@ -4,8 +4,8 @@ import { glob } from "glob";
 
 dotenv.config();
 
-const port: string = process.env.PORT ? process.env.PORT : "8080";
-//const httpsPort: string = process.env.HTTPS_PORT ? process.env.HTTPS_PORT : "8081";
+const httpPort: string = process.env.HTTP_PORT ? process.env.HTTP_PORT : "8080";
+const httpsPort: string = process.env.HTTPS_PORT ? process.env.HTTPS_PORT : "8081";
 
 glob(`./src/games/*/*.ts`).then(async servFiles => {
 
@@ -18,7 +18,6 @@ glob(`./src/games/*/*.ts`).then(async servFiles => {
         //const tsfile = servFiles[i].split('src\\')[1];
 
         const tsfile = servFiles[i].split('src/')[1];
-
         console.log("tsfile", tsfile);
 
         const servClass = tsfile.split(".")[0]
@@ -33,7 +32,7 @@ glob(`./src/games/*/*.ts`).then(async servFiles => {
     }
 
     const server = new RGS(engines);
-    server.start(port);
+    server.start(httpPort, httpsPort);
     console.log("start server")
 })
 

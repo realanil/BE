@@ -25,7 +25,7 @@ import { ScatterSymbolCount } from "../../libs/engine/slots/conditions/scatter_s
 export class GameServer extends BaseSlotGame {
 
     constructor(){
-        super("Vikinng", "0.7");
+        super("Vikinng", "0.10");
         this.math = new VikingMath();
     }
 
@@ -217,7 +217,8 @@ export class GameServer extends BaseSlotGame {
     protected executeFreeSpin() {
         let state:SlotSpinState = new SlotSpinState();
 
-        const selectedSet:any = RandomHelper.GetRandomFromList( this.rng, this.math.freeReels );
+        const selectedSet = this.state.buybonus?.isBonusSpin ? this.math.freeReels[1] : this.math.freeReels[0];
+        // const selectedSet:any = RandomHelper.GetRandomFromList( this.rng, this.math.freeReels );
         state.reelId = selectedSet.id;
         state.stops = CreateStops.StandardStops(this.rng, selectedSet.reels, this.math.info.gridLayout );
         state.initialGrid = CreateGrid.StandardGrid( selectedSet.reels, state.stops);
@@ -265,7 +266,9 @@ export class GameServer extends BaseSlotGame {
 
         let state:SlotSpinState = new SlotSpinState();
 
-        const selectedSet:any = RandomHelper.GetRandomFromList( this.rng, this.math.freeReSpinReels );
+        //const selectedSet:any = RandomHelper.GetRandomFromList( this.rng, this.math.freeReSpinReels );
+        const selectedSet = this.state.buybonus?.isBonusSpin ? this.math.freeReSpinReels[1] : this.math.freeReSpinReels[0];
+
         state.reelId = selectedSet.id;
         state.stops = CreateStops.StandardStops(this.rng, selectedSet.reels, this.math.info.gridLayout );
         state.initialGrid = CreateGrid.StandardGrid( selectedSet.reels, state.stops);
@@ -334,10 +337,16 @@ export class GameServer extends BaseSlotGame {
         if (reel1Offsets.length > 0) {
             const randomSymbols = [];
             newGrid[1].forEach( symbol => {
-                if ( symbol !== 11 && symbol !== 12 ) {
+                if ( symbol !== 11 && symbol !== 12 && symbol !== 0 ) {
                     randomSymbols.push( { weight : 1, symbol : symbol } );
                 }
             })
+            if ( randomSymbols.length == 0 ) {
+                const symbols = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                symbols.forEach( symbol => {
+                    randomSymbols.push( { weight : 1, symbol : symbol })
+                })
+            }
             const symbol :any = RandomHelper.GetRandomFromList( this.rng, randomSymbols);
             newGrid = Grid.ReplaceSymbolsInOffsets( reel1Offsets, newGrid, symbol.symbol);
         }
@@ -346,7 +355,7 @@ export class GameServer extends BaseSlotGame {
         if (reel23Offsets.length > 0) {
             const randomSymbols = [];
             newGrid[0].forEach( symbol => {
-                if ( symbol !== 11 && symbol !== 12 ) {
+                if ( symbol !== 11 && symbol !== 12 && symbol !== 0) {
                     randomSymbols.push( { weight : 1, symbol : symbol } );
                 }
             })
